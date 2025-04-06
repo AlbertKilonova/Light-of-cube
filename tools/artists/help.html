@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品编辑器使用帮助</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      color: #333;
+    }
+    ol, ul {
+      margin-bottom: 20px;
+    }
+    a {
+      color: #0066cc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>作品编辑器使用帮助</h1>
+
+    <h2>功能简介</h2>
+    <p>本编辑器允许您通过可视化界面快速编辑成员信息与作品内容，支持动态添加多项作品及媒体文件，最终生成可下载的 HTML 文件。</p>
+
+    <h2>使用步骤</h2>
+    <ol>
+      <li>填写顶部的标题、职位、成员名字与成员描述信息。</li>
+      <li>点击“添加作品”按钮添加新的作品项。</li>
+      <li>为每个作品填写标题和详情。</li>
+      <li>点击“添加媒体”按钮为该作品添加图片链接或 Bilibili 视频嵌入链接。</li>
+      <li>重复以上步骤可添加多个作品和媒体。</li>
+      <li>点击“更新预览”按钮以查看右侧的实时预览效果。</li>
+      <li>确认无误后，点击“下载 HTML 文件”按钮生成最终页面。</li>
+    </ol>
+
+    <h2>媒体链接说明</h2>
+    <p><strong>1. 获取图片的 URL 地址</strong></p>
+    <ul>
+      <li><strong>从网络获取图片 URL：</strong>
+        <ul>
+          <li>在浏览器中找到所需的在线图片。</li>
+          <li>右键点击该图片，选择“复制图片地址”或类似选项。</li>
+          <li>将复制的链接粘贴到编辑器的媒体链接输入框中。</li>
+        </ul>
+      </li>
+      <li><strong>从本地上传图片并获取 URL：</strong>
+        <ul>
+          <li>使用图床服务（如 <a href="https://sm.ms/" target="_blank">SM.MS</a>）上传本地图片。</li>
+          <li>在网站上点击“Browse...”按钮，选择并上传图片。</li>
+          <li>上传成功后，网站会生成该图片的 URL 地址，复制该链接并粘贴到编辑器的媒体链接输入框中。</li>
+        </ul>
+      </li>
+    </ul>
+
+    <p><strong>2. 获取 Bilibili 视频的嵌入链接</strong></p>
+    <ul>
+      <li>打开 Bilibili 网站，找到想要嵌入的视频。</li>
+      <li>点击视频下方的“分享”按钮。</li>
+      <li>在弹出的选项中，点击“嵌入代码”，并复制提供的 <code>&lt;iframe&gt;</code> 代码。</li>
+      <li>从复制的 <code>&lt;iframe&gt;</code> 代码中，提取 <code>src</code> 属性的 URL（例如，<code>https://player.bilibili.com/player.html?bvid=XXXX</code>）。</li>
+      <li>将提取的链接粘贴到编辑器的媒体链接输入框中。</li>
+    </ul>
+
+    <h2>生成的 HTML 文件</h2>
+    <p>下载的 HTML 文件将自动包含引用本地同级目录的 <code>style.css</code> 和 <code>script.js</code> 文件，以确保样式和交互行为一致。</p>
+
+    <h2>联系方式</h2>
+    <p>如有建议或问题，欢迎通过邮箱 <a href="mailto:contact@example.com">contact@example.com</a> 与我们联系。</p>
+  </div>
+</body>
+</html>
