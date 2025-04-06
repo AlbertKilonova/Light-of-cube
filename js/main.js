@@ -4,6 +4,28 @@ document.addEventListener("DOMContentLoaded", function () {
   loadArtists();
 });
 
+// 创建加载动画
+function createLoadingAnimation() {
+  const loadingAnimation = document.createElement("div");
+  loadingAnimation.id = "loadingAnimation";
+  loadingAnimation.innerHTML = `
+    <div class="spinner"></div>
+    <p>正在加载...</p>
+  `;
+  document.body.appendChild(loadingAnimation);
+  loadingAnimation.classList.add("show");
+  
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      loadingAnimation.classList.remove("show");
+      setTimeout(() => {
+        document.body.removeChild(loadingAnimation);
+        resolve();
+      }, 300);
+    }, 1000);
+  });
+}
+
 // 加载轮播作品数据并生成轮播效果
 function loadCarousel() {
   fetch("data/carousel.json")
@@ -87,17 +109,16 @@ function loadArtists() {
         item.style.animationDelay = `${i * 0.2}s`;
 
         // 创建链接，点击后跳转到对应 artist.id 的 HTML 文件（例如 artists/007.html）
-        const link = document.createElement("a");
-        link.href = `artists/${artist.id}.html`;
-        // 移除默认链接样式
-        link.style.textDecoration = "none";
-        link.style.color = "inherit";
-        link.innerHTML = `
+        item.addEventListener("click", async () => {
+          await createLoadingAnimation();
+          window.location.href = `artists/${artist.id}.html`;
+        });
+
+        item.innerHTML = `
           <h3>${artist.name}</h3>
           <p>职位：${artist.position}</p>
           <p>擅长：${artist.allowedTypes.join("、") || "无"}</p>
         `;
-        item.appendChild(link);
         container.appendChild(item);
       });
     })
