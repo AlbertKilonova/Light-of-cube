@@ -47,23 +47,54 @@ function loadWorks() {
     .then(res => res.json())
     .then(data => {
       const container = document.getElementById("worksContainer");
+      container.innerHTML = ""; // 清空容器
+
+      // 检查作品数量，决定是否启用横向滚动
+      if (data.length > 1) {
+        container.classList.remove("single-work");
+        container.classList.add("horizontal-scroll");
+      } else {
+        container.classList.remove("horizontal-scroll");
+        container.classList.add("single-work");
+      }
+
       data.forEach((work, i) => {
         const item = document.createElement("div");
         item.className = "work-item";
         // 添加入场动画与时差
         item.classList.add("animate");
         item.style.animationDelay = `${i * 0.2}s`;
-        let media = "";
-        if (work.type === "image") {
-          media = `<img src="${work.src}" alt="${work.title}"/>`;
-        } else if (work.type === "video") {
-          media = `<iframe src="${work.src}" frameborder="0" allowfullscreen></iframe>`;
-        }
+
+        // 创建横向滚动容器
+        const mediaContainer = document.createElement("div");
+        mediaContainer.className = "work-media-container";
+
+        // 处理多张图片或视频
+        work.media.forEach((media, j) => {
+          const mediaItem = document.createElement("div");
+          mediaItem.className = "work-media-item";
+          mediaItem.classList.add("animate");
+          mediaItem.style.animationDelay = `${j * 0.1}s`;
+
+          let mediaContent = "";
+          if (media.type === "image") {
+            mediaContent = `<img src="${media.src}" alt="${media.alt || work.title}"/>`;
+          } else if (media.type === "video") {
+            mediaContent = `<iframe src="${media.src}" frameborder="0" allowfullscreen></iframe>`;
+          }
+
+          mediaItem.innerHTML = mediaContent;
+          mediaContainer.appendChild(mediaItem);
+        });
+
         item.innerHTML = `
-          ${media}
           <h3>${work.title}</h3>
           <p>${work.description}</p>
         `;
+
+        // 将横向滚动容器添加到作品项中
+        item.insertBefore(mediaContainer, item.firstChild);
+
         container.appendChild(item);
       });
     })
@@ -72,6 +103,7 @@ function loadWorks() {
       document.getElementById("worksContainer").innerText = "作品数据加载失败。";
     });
 }
+
 
 // 加载艺术家数据并生成艺术家列表，点击卡片跳转到对应详情页
 function loadArtists() {

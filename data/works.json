@@ -1,20 +1,40 @@
 [
   {
-    "type": "video",
     "title": "P.H.",
-    "src": "//player.bilibili.com/player.html?isOutside=true&aid=114127498380883&bvid=BV1XrRWYeEEF&cid=28765916964&p=1",
-    "description": "牢桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉的文字pv！"
+    "description": "牢桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉的文字pv！",
+    "media": [
+      {
+        "type": "video",
+        "src": "//player.bilibili.com/player.html?isOutside=true&aid=114127498380883&bvid=BV1XrRWYeEEF&cid=28765916964&p=1",
+        "alt": "P.H. 视频"
+      }
+    ]
   },
   {
-    "type": "image",
     "title": "油画风景",
-    "src": "images/work3.jpg",
-    "description": "油画风格风景创作"
+    "description": "油画风格风景创作",
+    "media": [
+      {
+        "type": "image",
+        "src": "images/work3.jpg",
+        "alt": "油画风景1"
+      },
+      {
+        "type": "image",
+        "src": "images/work4.jpg",
+        "alt": "油画风景2"
+      }
+    ]
   },
   {
-    "type": "video",
-    "title": "video",
-    "src": "//player.bilibili.com/player.html?isOutside=true&aid=&bvid=&cid=&p=1",
-    "description": "测试"
+    "title": "测试",
+    "description": "测试",
+    "media": [
+      {
+        "type": "video",
+        "src": "//player.bilibili.com/player.html?isOutside=true&aid=&bvid=&cid=&p=1",
+        "alt": "测试视频"
+      }
+    ]
   }
 ]
