@@ -7,7 +7,7 @@ fetch('orders.json')
     orders = Array.isArray(data) ? data : [data];
   })
   .catch(err => {
-    alert('加载 orders.json 失败，请确保文件存在并使用本地服务器访问。');
+    alert('加载数据失败，请确保文件存在并使用本地服务器访问。');
     console.error(err);
   });
 
@@ -28,43 +28,60 @@ function queryOrder() {
     return;
   }
 
-  // 判断是否超时（只对未完成订单判断）
+  // 判断是否超时并计算超时时间
   let overdueHTML = '';
-  if (!found.completed && found.timeline?.deadline) {
+  if (found.timeline?.deadline) {
     const now = new Date();
     const deadline = new Date(found.timeline.deadline);
     const isOverdue = now > deadline;
 
-    overdueHTML = `<p><strong>是否超时：</strong> <span class="${isOverdue ? 'overdue' : 'on-time'}">
-      ${isOverdue ? '已超时' : '未超时'}
-    </span></p>`;
+    if (isOverdue) {
+      const diffMs = now - deadline;
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+
+      overdueHTML = `
+        <p><strong>超时状态：</strong> <span class="overdue">已超时</span></p>
+        <p><strong>已超时：</strong> ${diffDays}天 ${diffHours}小时 ${diffMinutes}分钟</p>
+      `;
+    } else {
+      overdueHTML = `<p><strong>超时状态：</strong> <span class="on-time">未超时</span></p>`;
+    }
   }
 
   // 客户信息
   const clientHTML = found.client ? `
     <div class="section">
-      <div class="section-title">客户信息</div>
-      <p><strong>客户名称：</strong>${found.client.name}</p>
+      <div class="section-title">单主信息</div>
+      <p><strong>单主名称：</strong>${found.client.name}</p>
     </div>
   ` : '';
 
   // 业务信息
   const businessHTML = found.business ? `
     <div class="section">
-      <div class="section-title">业务信息</div>
+      <div class="section-title">详细信息</div>
       <p><strong>详情：</strong>${found.business.details}</p>
       <p><strong>价格：</strong>${found.business.price}</p>
       <p><strong>分成类型：</strong>${found.business.commissionType}</p>
     </div>
   ` : '';
 
-  // 截止日期和支付状态
-  const deadlineStatusHTML = `
+  // 截止日期状态和支付状态
+  const statusHTML = `
     <div class="section">
       <div class="section-title">状态信息</div>
-      <p><strong>截止日期状态：</strong>${found.deadline ? '是' : '否'}</p>
-      <p><strong>支付状态：</strong>${found.payment ? '已支付' : '未支付'}</p>
+      <p><strong>截稿状态：</strong>${found.deadline ? '是' : '否'}</p>
+      <p><strong>付款状态：</strong>${found.payment ? '已支付' : '未支付'}</p>
     </div>
+  `;
+
+  // 订单完成状态
+  const completedHTML = found.payment && found.deadline ? `
+    <p><strong>完成状态：</strong>已完成</p>
+  ` : `
+    <p><strong>完成状态：</strong>未完成</p>
   `;
 
   resultBox.innerHTML = `
@@ -74,13 +91,15 @@ function queryOrder() {
       <p><strong>画师：</strong>${found.artist?.name}（ID: ${found.artist?.id}）</p>
       <p><strong>类型：</strong>${found.type} - ${found.subtype}</p>
       <p><strong>下单时间：</strong>${found.timeline?.orderTime}</p>
-      <p><strong>排期时间：</strong>${found.timeline?.scheduled}</p>
       <p><strong>截止时间：</strong>${found.timeline?.deadline}</p>
-      <p><strong>完成状态：</strong>${found.completed ? '已完成' : '未完成'}</p>
       ${overdueHTML}
+      ${completedHTML}
     </div>
+    <hr>
     ${clientHTML}
+    <hr>
     ${businessHTML}
-    ${deadlineStatusHTML}
+    <hr>
+    ${statusHTML}
   `;
 }
