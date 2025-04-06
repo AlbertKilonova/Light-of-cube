@@ -16,5 +16,11 @@
     "title": "油画风景",
     "src": "images/work3.jpg",
     "description": "油画风格风景创作"
+  },
+  {
+    "type": "video",
+    "title": "video",
+    "src": "//player.bilibili.com/player.html?isOutside=true&aid=113933570605497&bvid=BV1NbF6ejELr&cid=28186182208&p=1",
+    "description": "测试"
   }
 ]
