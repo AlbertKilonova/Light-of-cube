@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const copyBtn = document.getElementById('copy-btn');
   const saveJsonBtn = document.getElementById('save-json-btn');
   const saveImageBtn = document.getElementById('save-image-btn');
+  const extractBtn = document.getElementById('extract-btn');
+  const extractFileInput = document.getElementById('extract-file');
+  const extractKeyInput = document.getElementById('extract-key');
+  const extractResult = document.getElementById('extract-result');
   const orderTypeSelect = document.getElementById('order-type');
   const orderSubtypeSelect = document.getElementById('order-subtype');
   const subtypeContainer = document.getElementById('subtype-container');
@@ -12,15 +16,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const artistIdError = document.getElementById('artist-id-error');
   const orderTimeInput = document.getElementById('order-time');
   const orderTimeError = document.getElementById('order-time-error');
-  const scheduledTimeInput = document.getElementById('scheduled-time');
-  const scheduledTimeError = document.getElementById('scheduled-time-error');
   const deadlineTimeInput = document.getElementById('deadline-time');
   const deadlineTimeError = document.getElementById('deadline-time-error');
+  const clientNameInput = document.getElementById('client-name');
+  const businessDetailsInput = document.getElementById('business-details');
+  const priceInput = document.getElementById('price');
+  const commissionTypeSelect = document.getElementById('commission-type');
+  const previewCanvas = document.getElementById('preview-canvas');
+  const previewCtx = previewCanvas.getContext('2d');
   const loadingText = document.getElementById('loading');
 
   let orderTypes = {};
   let artists = [];
   let selectedArtist = null;
+  let currentOrderInfo = null;
 
   // 生成随机哈希值
   function generateHash(length = 6) {
@@ -96,9 +105,24 @@ document.addEventListener('DOMContentLoaded', function () {
     ctx.closePath();
   }
 
-  // 保存订单图片
-  function saveOrderImage(orderInfo) {
-    const canvas = document.createElement('canvas');
+  // 使用加密密钥加密数据
+  function encryptData(data, key) {
+    return CryptoJS.AES.encrypt(data, key).toString();
+  }
+
+  // 使用加密密钥解密数据
+  function decryptData(encryptedData, key) {
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedData, key);
+      return bytes.toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+      console.error('解密失败: ', error);
+      return null;
+    }
+  }
+
+  // 绘制订单图片
+  function drawOrderImage(orderInfo, key, canvas) {
     const ctx = canvas.getContext('2d');
 
     // 设置Canvas尺寸
@@ -107,10 +131,10 @@ document.addEventListener('DOMContentLoaded', function () {
     canvas.width = width;
     canvas.height = height;
 
-    // 绘制渐变背景
+    // 绘制蓝紫渐变背景
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, '#ffffff');
-    gradient.addColorStop(1, '#f0f0f0');
+    gradient.addColorStop(0, '#e0e0ff'); // 浅蓝色
+    gradient.addColorStop(1, '#f0f0f0'); // 浅灰色
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
@@ -123,12 +147,15 @@ document.addEventListener('DOMContentLoaded', function () {
     ctx.fillText('光之立方画社订单信息', width / 2, 80);
     ctx.shadowBlur = 0; // 重置阴影
 
-    // 绘制装饰线
+    // 绘制装饰线（蓝紫渐变色）
+    const lineGradient = ctx.createLinearGradient(50, 100, width - 50, 100);
+    lineGradient.addColorStop(0, '#4169E1'); // 皇家蓝
+    lineGradient.addColorStop(1, '#8A2BE2'); // 紫色
     ctx.beginPath();
     ctx.moveTo(50, 100);
     ctx.lineTo(width - 50, 100);
-    ctx.strokeStyle = '#4CAF50';
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = lineGradient;
+    ctx.lineWidth = 3;
     ctx.stroke();
 
     // 绘制订单信息区域（使用圆角矩形和渐变）
@@ -143,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
     ctx.shadowBlur = 8;
     roundRect(ctx, tableX, tableY, tableWidth, tableHeight, radius);
-    ctx.fillStyle = '#4CAF50';
+    ctx.fillStyle = '#8A2BE2';
     ctx.fill();
     ctx.restore();
 
@@ -175,8 +202,11 @@ document.addEventListener('DOMContentLoaded', function () {
       { label: '画师昵称', value: orderInfo.artist.name },
       { label: '订单类型', value: `${orderInfo.type} (${orderInfo.subtype})` },
       { label: '下单时间', value: formatDate(orderInfo.timeline.orderTime) },
-      { label: '预计排到时间', value: formatDate(orderInfo.timeline.scheduled) },
-      { label: '截稿时间', value: formatDate(orderInfo.timeline.deadline) }
+      { label: '截稿时间', value: formatDate(orderInfo.timeline.deadline) },
+      { label: '单主名称', value: orderInfo.client.name },
+      { label: '业务详情', value: orderInfo.business.details },
+      { label: '价格', value: orderInfo.business.price },
+      { label: '抽成类型', value: orderInfo.business.commissionType }
     ];
 
     tableRows.forEach(row => {
@@ -200,24 +230,104 @@ document.addEventListener('DOMContentLoaded', function () {
     ctx.beginPath();
     ctx.moveTo(50, height - 100);
     ctx.quadraticCurveTo(width / 2, height - 50, width - 50, height - 100);
-    ctx.strokeStyle = '#4CAF50';
+    ctx.strokeStyle = '#8A2BE2';
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // 绘制图标及生成时间
+    // 绘制图标
     ctx.font = '24px "Microsoft YaHei"';
-    ctx.fillStyle = '#4CAF50';
+    ctx.fillStyle = '#8A2BE2';
     ctx.fillText('⏰', 60, height - 60);
-    ctx.font = '14px "Microsoft YaHei"';
-    ctx.fillStyle = '#666';
-    ctx.fillText('生成时间: ' + new Date().toLocaleString(), 100, height - 55);
 
-    // 将Canvas内容转换为图片并自动下载
-    const image = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.download = `order_${orderInfo.orderId}.png`;
-    link.href = image;
-    link.click();
+    // 将订单数据转换为二进制字符串并加密
+    const orderData = JSON.stringify(orderInfo);
+    const encryptedData = encryptData(orderData, key);
+    const binaryData = textToBinary(encryptedData);
+
+    // 在图片中嵌入隐写数据
+    embedDataInImage(canvas, binaryData);
+
+    return canvas;
+  }
+
+  // 将文本转换为二进制字符串
+  function textToBinary(text) {
+    return text.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join('');
+  }
+
+  // 在图片中嵌入隐写数据
+  function embedDataInImage(canvas, binaryData) {
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    // 添加数据长度头部
+    const dataLength = binaryData.length;
+    const lengthBinary = dataLength.toString(2).padStart(32, '0'); // 32位长度头部
+    const fullData = lengthBinary + binaryData;
+
+    // 嵌入数据到像素的最低有效位
+    for (let i = 0; i < fullData.length; i++) {
+      if (i * 4 >= data.length) break; // 防止超出图像数据范围
+      const bit = parseInt(fullData[i]);
+      data[i * 4] = (data[i * 4] & 0xFE) | bit; // 修改红色通道的最低有效位
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+  }
+
+  // 从图片中提取隐写数据
+  function extractDataFromImage(canvas, key) {
+    const ctx = canvas.getContext('2d');
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+// 提取数据长度头部
+    let lengthBinary = '';
+    for (let i = 0; i < 32; i++) {
+      if (i * 4 >= data.length) break;
+      lengthBinary += (data[i * 4] & 1).toString();
+    }
+    const dataLength = parseInt(lengthBinary, 2);
+
+    // 提取实际数据
+    let binaryData = '';
+    for (let i = 32; i < 32 + dataLength; i++) {
+      if (i * 4 >= data.length) break;
+      binaryData += (data[i * 4] & 1).toString();
+    }
+
+    // 将二进制数据转换为文本
+    const extractedText = binaryToText(binaryData);
+    const decryptedData = decryptData(extractedText, key);
+    return decryptedData;
+  }
+
+  // 将二进制字符串转换为文本
+  function binaryToText(binary) {
+    const bytes = [];
+    for (let i = 0; i < binary.length; i += 8) {
+      const byte = binary.substr(i, 8);
+      const charCode = parseInt(byte, 2);
+      bytes.push(charCode);
+    }
+    return String.fromCharCode(...bytes);
+  }
+
+  // 格式化元数据，方便人类阅读
+  function formatMetadata(orderInfo) {
+    return `
+订单唯一ID: ${orderInfo.orderId}
+画师ID: ${orderInfo.artist.id}
+画师昵称: ${orderInfo.artist.name}
+订单类型: ${orderInfo.type} (${orderInfo.subtype})
+下单时间: ${formatDate(orderInfo.timeline.orderTime)}
+截稿时间: ${formatDate(orderInfo.timeline.deadline)}
+单主名称: ${orderInfo.client.name}
+业务详情: ${orderInfo.business.details}
+价格: ${orderInfo.business.price}
+抽成类型: ${orderInfo.business.commissionType}
+    `;
   }
 
   // 从外部JSON加载数据
@@ -285,7 +395,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // 重置错误信息
     artistIdError.textContent = '';
     orderTimeError.textContent = '';
-    scheduledTimeError.textContent = '';
     deadlineTimeError.textContent = '';
 
     // 获取表单数据
@@ -293,8 +402,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const orderType = orderTypeSelect.value;
     const orderSubtype = orderSubtypeSelect.value;
     const orderTime = orderTimeInput.value;
-    const scheduledTime = scheduledTimeInput.value;
     const deadlineTime = deadlineTimeInput.value;
+    const clientName = clientNameInput.value.trim();
+    const businessDetails = businessDetailsInput.value.trim();
+    const price = priceInput.value;
+    const commissionType = commissionTypeSelect.value;
 
     // 验证画师ID
     if (!validateArtistId(artistId)) {
@@ -319,10 +431,6 @@ document.addEventListener('DOMContentLoaded', function () {
       orderTimeError.textContent = '请选择下单时间';
       return;
     }
-    if (!scheduledTime) {
-      scheduledTimeError.textContent = '请选择预计排到时间';
-      return;
-    }
     if (!deadlineTime) {
       deadlineTimeError.textContent = '请选择截稿时间';
       return;
@@ -342,11 +450,21 @@ document.addEventListener('DOMContentLoaded', function () {
       subtype: orderSubtype,
       timeline: {
         orderTime: orderTime,
-        scheduled: scheduledTime,
         deadline: deadlineTime
       },
-      completed: false // 默认为false
+      client: {
+        name: clientName
+      },
+      business: {
+        details: businessDetails,
+        price: price,
+        commissionType: commissionType
+      },
+      deadline: false, // 默认为false
+      payment: false
     };
+
+    currentOrderInfo = orderInfo;
 
     // 显示订单信息
     orderDetails.innerHTML = `
@@ -355,12 +473,18 @@ document.addEventListener('DOMContentLoaded', function () {
       <p><strong>画师昵称:</strong> ${orderInfo.artist.name}</p>
       <p><strong>订单类型:</strong> ${orderInfo.type} (${orderInfo.subtype})</p>
       <p><strong>下单时间:</strong> ${formatDate(orderInfo.timeline.orderTime)}</p>
-      <p><strong>预计排到时间:</strong> ${formatDate(orderInfo.timeline.scheduled)}</p>
       <p><strong>截稿时间:</strong> ${formatDate(orderInfo.timeline.deadline)}</p>
+      <p><strong>单主名称:</strong> ${orderInfo.client.name}</p>
+      <p><strong>业务详情:</strong> ${orderInfo.business.details}</p>
+      <p><strong>价格:</strong> ${orderInfo.business.price}</p>
+      <p><strong>抽成类型:</strong> ${orderInfo.business.commissionType}</p>
     `;
 
     // 显示结果区域
     orderResult.style.display = 'block';
+
+    // 更新预览图
+    const previewCanvas = drawOrderImage(orderInfo, orderId, document.getElementById('preview-canvas'));
 
     // 设置按钮事件
     copyBtn.onclick = function () {
@@ -372,8 +496,57 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     saveImageBtn.onclick = function () {
-      saveOrderImage(orderInfo);
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const image = drawOrderImage(orderInfo, orderId, canvas);
+      const imgData = image.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = `order_${orderInfo.orderId}.png`;
+      link.href = imgData;
+      link.click();
     };
+  });
+
+  // 解析图片中的隐写数据
+  extractBtn.addEventListener('click', function () {
+    const file = extractFileInput.files[0];
+    const key = extractKeyInput.value.trim();
+
+    if (!file) {
+      alert('请选择图片文件');
+      return;
+    }
+
+    if (!key) {
+      alert('请输入密钥');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const img = new Image();
+      img.onload = function () {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        try {
+          const extractedData = extractDataFromImage(canvas, key);
+          if (extractedData) {
+            const orderInfo = JSON.parse(extractedData);
+            extractResult.innerHTML = '<pre>' + formatMetadata(orderInfo) + '</pre>';
+          } else {
+            extractResult.textContent = '提取数据失败：数据无法解密，请检查密钥是否正确';
+          }
+        } catch (error) {
+          extractResult.textContent = '提取数据失败：' + error.message;
+        }
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
   });
 
   // 加载外部数据

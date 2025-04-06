@@ -37,15 +37,32 @@
         </div>
         
         <div class="form-group">
-            <label for="scheduled-time">预计排到时间</label>
-            <input type="datetime-local" id="scheduled-time">
-            <div id="scheduled-time-error" class="error"></div>
-        </div>
-        
-        <div class="form-group">
             <label for="deadline-time">截稿时间</label>
             <input type="datetime-local" id="deadline-time">
             <div id="deadline-time-error" class="error"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="client-name">单主名称</label>
+            <input type="text" id="client-name" placeholder="请输入单主名称">
+        </div>
+        
+        <div class="form-group">
+            <label for="business-details">业务详情</label>
+            <textarea id="business-details" placeholder="请输入业务详情"></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="price">价格</label>
+            <input type="number" id="price" placeholder="请输入价格">
+        </div>
+        
+        <div class="form-group">
+            <label for="commission-type">自付抽成/包抽成</label>
+            <select id="commission-type">
+                <option value="自付抽成">自付抽成</option>
+                <option value="包抽成">包抽成</option>
+            </select>
         </div>
         
         <button id="generate-btn" disabled>生成订单</button>
@@ -55,15 +72,36 @@
             <div class="order-details" id="order-details">
                 <!-- 订单信息将在这里显示 -->
             </div>
+            
+            <div class="preview-container">
+                <h3>实时预览</h3>
+                <canvas id="preview-canvas" width="800" height="600"></canvas>
+            </div>
+            
             <button class="copy-btn" id="copy-btn">复制订单ID</button>
             <button class="save-btn" id="save-json-btn">保存订单JSON</button>
             <button class="save-btn" id="save-image-btn">保存订单图片</button>
+        </div>
+        
+        <div class="extract-container">
+            <h3>图片隐写解析</h3>
+            <div class="form-group">
+                <label for="extract-file">选择图片文件</label>
+                <input type="file" id="extract-file" accept="image/png">
+            </div>
+            <div class="form-group">
+                <label for="extract-key">输入密钥</label>
+                <input type="text" id="extract-key" placeholder="请输入密钥">
+            </div>
+            <button class="save-btn" id="extract-btn">解析内容</button>
+            <div id="extract-result"></div>
         </div>
         
         <div class="loading" id="loading">正在加载数据...</div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
