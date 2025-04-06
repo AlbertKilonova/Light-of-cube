@@ -2,26 +2,46 @@
     "绘画": {
         "code": "PAINT",
         "subtypes": ["插画", "漫画", "半身", "头像", "立绘", "OC", "概念设计"],
-        "allowedPositions": ["animation", "President", "mascot"]
+        "allowedPositions": ["painter", "animator", "mascot"]
     },
     "动画": {
         "code": "ANIM",
-        "subtypes": ["特效", "手书", "MV", "视效", "火柴人逐帧", "MG动画", "meme" ,"动态LOGO"],
-        "allowedPositions": ["animation", "mascot"]
+        "subtypes": ["特效", "手书", "MV", "视效", "火柴人逐帧", "MG动画", "meme", "动态LOGO"],
+        "allowedPositions": ["animator", "mascot"]
     },
     "cos": {
         "code": "COS",
         "subtypes": [],
-        "allowedPositions": []
+        "allowedPositions": ["cosplayer"]
     },
     "配音": {
         "code": "VOICE",
         "subtypes": ["角色配音", "旁白", "音效设计", "音效合成"],
-        "allowedPositions": ["animation","dub"]
+        "allowedPositions": ["voice actor", "animator", "dub"]
     },
     "设计": {
         "code": "DESIGN",
         "subtypes": ["UI设计", "角色设计", "LOGO设计", "海报设计"],
-        "allowedPositions": ["animation"]
+        "allowedPositions": ["animator"]
+    },
+    "写作": {
+        "code": "WRITING",
+        "subtypes": ["小说", "剧本", "文案", "诗歌"],
+        "allowedPositions": ["writer", "painter"]
+    },
+    "手作": {
+        "code": "CRAFT",
+        "subtypes": ["雕塑", "模型", "道具制作", "手工饰品"],
+        "allowedPositions": ["crafter"]
+    },
+    "占卜": {
+        "code": "DIVINATION",
+        "subtypes": ["塔罗", "星盘", "占星", "易经"],
+        "allowedPositions": ["diviner"]
+    },
+    "编曲": {
+        "code": "COMPOSITION",
+        "subtypes": ["电子音乐", "古典编曲", "流行编曲", "音效设计"],
+        "allowedPositions": ["composer"]
     }
 }
