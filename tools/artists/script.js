@@ -56,9 +56,19 @@ function addWork() {
             </div>
             <button type="button" onclick="addVideo(${newWorkId})">添加视频</button>
         </div>
+        
+        <button type="button" class="remove-work" onclick="removeWork(${newWorkId})">删除作品</button>
     `;
     
     worksContainer.appendChild(workItem);
+}
+
+// 删除作品
+function removeWork(workId) {
+    const workItem = document.getElementById(`work${workId}`);
+    if (workItem) {
+        workItem.remove();
+    }
 }
 
 // 切换媒体选项
@@ -75,6 +85,7 @@ function toggleMediaOptions(workId) {
         videoContainer.style.display = 'block';
     }
 }
+
 // 添加图片
 function addImage(workId) {
     const imageContainer = document.getElementById(`imageContainer${workId}`);
@@ -83,7 +94,6 @@ function addImage(workId) {
     
     const imageItem = document.createElement('div');
     imageItem.className = 'image-item';
-    
     imageItem.innerHTML = `
         <div class="form-group">
             <label for="imageTitle${workId}-${newImageId}">图片标题:</label>
@@ -93,9 +103,18 @@ function addImage(workId) {
             <label for="imageUrl${workId}-${newImageId}">图片链接:</label>
             <input type="text" id="imageUrl${workId}-${newImageId}" placeholder="例如: https://example.com/image${newImageId}.jpg">
         </div>
+        <span class="remove-item" onclick="removeImage(${workId}, ${newImageId})">-</span>
     `;
     
     imageContainer.appendChild(imageItem);
+}
+
+// 删除图片
+function removeImage(workId, imageId) {
+    const imageItem = document.querySelector(`#work${workId} #imageContainer${workId} .image-item:nth-child(${imageId})`);
+    if (imageItem) {
+        imageItem.remove();
+    }
 }
 
 // 添加视频
@@ -106,16 +125,25 @@ function addVideo(workId) {
     
     const videoItem = document.createElement('div');
     videoItem.className = 'video-item';
-    
     videoItem.innerHTML = `
         <div class="form-group">
             <label for="videoLink${workId}-${newVideoId}">Bilibili视频链接:</label>
             <input type="text" id="videoLink${workId}-${newVideoId}" placeholder="例如: https://www.bilibili.com/video/BVXXXXXXXXXX">
         </div>
+        <span class="remove-item" onclick="removeVideo(${workId}, ${newVideoId})">-</span>
     `;
     
     videoContainer.appendChild(videoItem);
 }
+
+// 删除视频
+function removeVideo(workId, videoId) {
+    const videoItem = document.querySelector(`#work${workId} #videoContainer${workId} .video-item:nth-child(${videoId})`);
+    if (videoItem) {
+        videoItem.remove();
+    }
+}
+
 // 生成HTML代码
 function generateHTML() {
     // 获取头部信息
@@ -138,47 +166,72 @@ function generateHTML() {
     
     workItems.forEach((workItem, index) => {
         const workId = index + 1;
-        const workTitle = workItem.querySelector(`#workTitle${workId}`).value || `作品 ${workId}`;
-        const workDescription = workItem.querySelector(`#workDescription${workId}`).value || '2023年 | 作品类型 | 尺寸';
+        const workTitleInput = workItem.querySelector(`#workTitle${workId}`);
+        const workDescriptionInput = workItem.querySelector(`#workDescription${workId}`);
+        const mediaTypeSelect = workItem.querySelector('.media-type');
         
-        const mediaType = workItem.querySelector(`#work${workId} .media-type`).value;
+        if (!workTitleInput || !workDescriptionInput || !mediaTypeSelect) {
+            return; // 跳过无效的作品项
+        }
+        
+        const workTitle = workTitleInput.value || `作品 ${workId}`;
+        const workDescription = workDescriptionInput.value || '2023年 | 作品类型 | 尺寸';
+        const mediaType = mediaTypeSelect.value;
+        
         let mediaHTML = '';
         
         if (mediaType === 'image') {
-            const imageContainer = document.getElementById(`imageContainer${workId}`);
-            const imageItems = imageContainer.querySelectorAll('.image-item');
-            
-            imageItems.forEach((imageItem, imgIndex) => {
-                const imgId = imgIndex + 1;
-                const imageTitle = imageItem.querySelector(`#imageTitle${workId}-${imgId}`).value || `图片 ${imgId}`;
-                const imageUrl = imageItem.querySelector(`#imageUrl${workId}-${imgId}`).value || 'https://source.unsplash.com/random/600x400/?art';
+            const imageContainer = workItem.querySelector(`#imageContainer${workId}`);
+            if (imageContainer) {
+                const imageItems = imageContainer.querySelectorAll('.image-item');
                 
-                mediaHTML += `
-                    <div class="work-media-item">
-                        <img src="${imageUrl}" alt="${imageTitle}">
-                        <p>${imageTitle}</p>
-                    </div>
-                `;
-            });
-        } else {
-            const videoContainer = document.getElementById(`videoContainer${workId}`);
-            const videoItems = videoContainer.querySelectorAll('.video-item');
-            
-            videoItems.forEach((videoItem, vidIndex) => {
-                const vidId = vidIndex + 1;
-                const videoLink = videoItem.querySelector(`#videoLink${workId}-${vidId}`).value;
-                if (videoLink) {
-                    const videoIdMatch = videoLink.match(/video\/(BV\w+)/);
-                    if (videoIdMatch && videoIdMatch[1]) {
-                        const videoId = videoIdMatch[1];
-                        mediaHTML += `
-                            <div class="video-item-container">
-                                <iframe src="//player.bilibili.com/player.html?bvid=${videoId}" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
-                            </div>
-                        `;
+                imageItems.forEach((imageItem, imgIndex) => {
+                    const imgId = imgIndex + 1;
+                    const imageTitleInput = imageItem.querySelector(`#imageTitle${workId}-${imgId}`);
+                    const imageUrlInput = imageItem.querySelector(`#imageUrl${workId}-${imgId}`);
+                    
+                    if (!imageTitleInput || !imageUrlInput) {
+                        return; // 跳过无效的图片项
                     }
-                }
-            });
+                    
+                    const imageTitle = imageTitleInput.value || `图片 ${imgId}`;
+                    const imageUrl = imageUrlInput.value || 'https://source.unsplash.com/random/600x400/?art';
+                    
+                    mediaHTML += `
+                        <div class="work-media-item">
+                            <img src="${imageUrl}" alt="${imageTitle}">
+                            <p>${imageTitle}</p>
+                        </div>
+                    `;
+                });
+            }
+        } else {
+            const videoContainer = workItem.querySelector(`#videoContainer${workId}`);
+            if (videoContainer) {
+                const videoItems = videoContainer.querySelectorAll('.video-item');
+                
+                videoItems.forEach((videoItem, vidIndex) => {
+                    const vidId = vidIndex + 1;
+                    const videoLinkInput = videoItem.querySelector(`#videoLink${workId}-${vidId}`);
+                    
+                    if (!videoLinkInput) {
+                        return; // 跳过无效的视频项
+                    }
+                    
+                    const videoLink = videoLinkInput.value;
+                    if (videoLink) {
+                        const videoIdMatch = videoLink.match(/video\/(BV\w+)/);
+                        if (videoIdMatch && videoIdMatch[1]) {
+                            const videoId = videoIdMatch[1];
+                            mediaHTML += `
+                                <div class="video-item-container">
+                                    <iframe src="//player.bilibili.com/player.html?bvid=${videoId}" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+            }
         }
         
         worksHTML += `
