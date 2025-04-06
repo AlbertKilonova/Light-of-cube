@@ -102,7 +102,7 @@ function loadArtists() {
       });
     })
     .catch(error => {
-      console.error("加载艺术家数据失败：", error);
-      document.getElementById("artistList").innerText = "艺术家数据加载失败。";
+      console.error("加载成员数据失败：", error);
+      document.getElementById("artistList").innerText = "成员数据加载失败。";
     });
 }
