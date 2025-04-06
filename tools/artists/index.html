@@ -1,111 +1,78 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML生成器</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动态作品编辑器</title>
+  <!-- 仅预览时使用指定样式文件 -->
+  <link rel="stylesheet" href="../../artists/style.css">
+  <!-- 编辑器专用样式 -->
+  <link rel="stylesheet" href="editor.css">
 </head>
 <body>
-    <h1>HTML生成器</h1>
-    
-    <form id="htmlGenerator">
-        <!-- 头部信息 -->
-        <div class="form-group">
-            <label for="headerTitle">头部标题:</label>
-            <input type="text" id="headerTitle" placeholder="例如: 空">
-        </div>
-        
-        <div class="form-group">
-            <label for="headerSubtitle">头部副标题:</label>
-            <input type="text" id="headerSubtitle" placeholder="例如: 吉祥物">
-        </div>
-        
-        <!-- 成员信息 -->
-        <div class="form-group">
-            <label for="memberName">成员名字:</label>
-            <input type="text" id="memberName" placeholder="例如: 张三" oninput="syncHeaderTitle()">
-        </div>
-        
-        <div class="form-group">
-            <label for="memberDescription">成员描述:</label>
-            <textarea id="memberDescription" rows="4" placeholder="例如: 我是一名热爱艺术和设计的创作者..."></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label for="memberImage">成员照片URL:</label>
-            <input type="text" id="memberImage" placeholder="例如: https://example.com/image.jpg">
-        </div>
-        
-        <!-- 作品部分 -->
-        <div id="worksContainer">
-            <h3>作品信息</h3>
-            <div class="work-item" id="work1">
-                <div class="form-group">
-                    <label for="workTitle1">作品标题:</label>
-                    <input type="text" id="workTitle1" placeholder="例如: 色彩的交响">
-                </div>
-                
-                <div class="form-group">
-                    <label for="workDescription1">作品描述:</label>
-                    <input type="text" id="workDescription1" placeholder="例如: 2023年 | 油画 | 60x80cm">
-                </div>
-                
-                <div class="media-options">
-                    <label>选择媒体类型:</label>
-                    <select class="media-type" onchange="toggleMediaOptions(1)">
-                        <option value="image">图片</option>
-                        <option value="video">视频</option>
-                    </select>
-                </div>
-                
-                <div class="image-container" id="imageContainer1">
-                    <div class="image-item">
-                        <div class="form-group">
-                            <label for="imageTitle1-1">图片标题:</label>
-                            <input type="text" id="imageTitle1-1" placeholder="例如: 图片1">
-                        </div>
-                        <div class="form-group">
-                            <label for="imageUrl1-1">图片链接:</label>
-                            <input type="text" id="imageUrl1-1" placeholder="例如: https://example.com/image1.jpg">
-                        </div>
-                        <span class="remove-item" onclick="removeImage(1, 1)">-</span>
-                    </div>
-                    <button type="button" onclick="addImage(1)">添加图片</button>
-                </div>
-                
-                <div class="video-container" id="videoContainer1" style="display: none;">
-                    <div class="video-item">
-                        <div class="form-group">
-                            <label for="videoLink1-1">Bilibili视频链接:</label>
-                            <input type="text" id="videoLink1-1" placeholder="例如: https://www.bilibili.com/video/BVXXXXXXXXXX">
-                        </div>
-                        <span class="remove-item" onclick="removeVideo(1, 1)">-</span>
-                    </div>
-                    <button type="button" onclick="addVideo(1)">添加视频</button>
-                </div>
-                
-                <button type="button" class="remove-work" onclick="removeWork(1)">删除作品</button>
-            </div>
-        </div>
-        
-        <button type="button" class="add-work" onclick="addWork()">添加作品</button>
-        
-        <!-- 页脚信息 -->
-        <div class="form-group">
-            <label for="footerContact">页脚联系信息:</label>
-            <input type="text" id="footerContact" placeholder="例如: contact@example.com">
-        </div>
-        
-        <button type="button" onclick="generateHTML()">生成HTML</button>
-    </form>
-    
-    <div class="preview" id="preview">
-        <h2>生成的HTML代码</h2>
-        <pre id="generatedHTML"></pre>
-        <button type="button" onclick="downloadHTML()">下载HTML文件</button>
+  <!-- 编辑区域 -->
+  <div class="editor">
+    <h2>编辑内容</h2>
+    <div>
+      <label for="headerText">Header 标题：</label>
+      <input type="text" id="headerText" placeholder="请输入标题" value="空">
     </div>
-    
-    <script src="script.js"></script>
+    <div>
+      <label for="mascot">吉祥物：</label>
+      <input type="text" id="mascot" placeholder="请输入吉祥物" value="吉祥物">
+    </div>
+    <div>
+      <label for="memberName">成员名字：</label>
+      <input type="text" id="memberName" placeholder="请输入名字" value="张三">
+    </div>
+    <div>
+      <label for="memberDesc">成员描述：</label>
+      <textarea id="memberDesc" rows="4" placeholder="请输入成员描述">
+我是一名热爱艺术和设计的创作者，专注于数字艺术、平面设计和摄影。
+      </textarea>
+    </div>
+    <hr>
+    <div id="worksEditor">
+      <h3>作品列表</h3>
+      <div id="worksContainer">
+        <!-- 作品项将动态添加在这里 -->
+      </div>
+      <button id="addWorkBtn" type="button">添加作品</button>
+    </div>
+    <br>
+    <button onclick="updatePreview()">更新预览</button>
+  </div>
+
+  <!-- 预览区域 -->
+  <div class="preview">
+    <h2>预览</h2>
+    <div id="previewContent">
+      <header>
+        <h1 id="previewHeader">空</h1>
+        <p id="previewMascot">吉祥物</p>
+      </header>
+      <main>
+        <section>
+          <h2>关于成员</h2>
+          <div class="item">
+            <h3 id="previewMemberName">张三</h3>
+            <p id="previewMemberDesc">我是一名热爱艺术和设计的创作者，专注于数字艺术、平面设计和摄影。</p>
+          </div>
+        </section>
+        <section>
+          <h2>我的作品</h2>
+          <div id="previewWorks">
+            <!-- 作品预览将动态生成 -->
+          </div>
+        </section>
+      </main>
+      <footer>
+        <p>联系: <a href="mailto:contact@example.com">contact@example.com</a></p>
+      </footer>
+    </div>
+    <button class="download-btn" onclick="downloadHTML()">下载 HTML 文件</button>
+  </div>
+  
+  <script src="script.js"></script>
 </body>
 </html>

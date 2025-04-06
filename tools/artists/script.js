@@ -1,310 +1,144 @@
-// 同步头部标题和成员名
-function syncHeaderTitle() {
-    const memberName = document.getElementById('memberName').value;
-    document.getElementById('headerTitle').value = memberName;
-}
+let workCount = 0;
+document.getElementById('addWorkBtn').addEventListener('click', addWork);
 
-// 添加作品
+// 添加一个作品编辑块
 function addWork() {
-    const worksContainer = document.getElementById('worksContainer');
-    const workCount = worksContainer.children.length;
-    const newWorkId = workCount + 1;
-    
-    const workItem = document.createElement('div');
-    workItem.className = 'work-item';
-    workItem.id = `work${newWorkId}`;
-    
-    workItem.innerHTML = `
-        <div class="form-group">
-            <label for="workTitle${newWorkId}">作品标题:</label>
-            <input type="text" id="workTitle${newWorkId}" placeholder="例如: 色彩的交响">
-        </div>
-        
-        <div class="form-group">
-            <label for="workDescription${newWorkId}">作品描述:</label>
-            <input type="text" id="workDescription${newWorkId}" placeholder="例如: 2023年 | 油画 | 60x80cm">
-        </div>
-        
-        <div class="media-options">
-            <label>选择媒体类型:</label>
-            <select class="media-type" onchange="toggleMediaOptions(${newWorkId})">
-                <option value="image">图片</option>
-                <option value="video">视频</option>
-            </select>
-        </div>
-        
-        <div class="image-container" id="imageContainer${newWorkId}">
-            <div class="image-item">
-                <div class="form-group">
-                    <label for="imageTitle${newWorkId}-1">图片标题:</label>
-                    <input type="text" id="imageTitle${newWorkId}-1" placeholder="例如: 图片1">
-                </div>
-                <div class="form-group">
-                    <label for="imageUrl${newWorkId}-1">图片链接:</label>
-                    <input type="text" id="imageUrl${newWorkId}-1" placeholder="例如: https://example.com/image1.jpg">
-                </div>
-                <span class="remove-item" onclick="removeImage(${newWorkId}, 1)">-</span>
-            </div>
-            <button type="button" onclick="addImage(${newWorkId})">添加图片</button>
-        </div>
-        
-        <div class="video-container" id="videoContainer${newWorkId}" style="display: none;">
-            <div class="video-item">
-                <div class="form-group">
-                    <label for="videoLink${newWorkId}-1">Bilibili视频链接:</label>
-                    <input type="text" id="videoLink${newWorkId}-1" placeholder="例如: https://www.bilibili.com/video/BVXXXXXXXXXX">
-                </div>
-                <span class="remove-item" onclick="removeVideo(${newWorkId}, 1)">-</span>
-            </div>
-            <button type="button" onclick="addVideo(${newWorkId})">添加视频</button>
-        </div>
-        
-        <button type="button" class="remove-work" onclick="removeWork(${newWorkId})">删除作品</button>
-    `;
-    
-    worksContainer.appendChild(workItem);
+  workCount++;
+  const worksContainer = document.getElementById('worksContainer');
+  
+  const workDiv = document.createElement('div');
+  workDiv.className = 'work-editor';
+  workDiv.setAttribute('data-work-index', workCount);
+  
+  workDiv.innerHTML = `
+    <h4>作品 ${workCount}</h4>
+    <div>
+      <label>作品标题：</label>
+      <input type="text" class="workTitle" placeholder="作品标题" value="作品标题 ${workCount}">
+    </div>
+    <div>
+      <label>作品详情：</label>
+      <input type="text" class="workDetails" placeholder="作品详情" value="详情 ${workCount}">
+    </div>
+    <div class="mediaContainer">
+      <h5>媒体内容</h5>
+      <!-- 媒体项将添加在这里 -->
+    </div>
+    <button type="button" class="addMediaBtn">添加媒体</button>
+    <button type="button" class="removeWorkBtn" style="background-color:#f44336;">删除作品</button>
+    <hr>
+  `;
+  
+  worksContainer.appendChild(workDiv);
+  
+  // 绑定“添加媒体”按钮事件
+  workDiv.querySelector('.addMediaBtn').addEventListener('click', function() {
+    addMedia(workDiv);
+  });
+  
+  // 绑定“删除作品”按钮事件
+  workDiv.querySelector('.removeWorkBtn').addEventListener('click', function() {
+    worksContainer.removeChild(workDiv);
+  });
 }
 
-// 删除作品
-function removeWork(workId) {
-    const workItem = document.getElementById(`work${workId}`);
-    if (workItem) {
-        workItem.remove();
-    }
+// 为指定作品添加媒体项
+function addMedia(workDiv) {
+  const mediaContainer = workDiv.querySelector('.mediaContainer');
+  const mediaDiv = document.createElement('div');
+  mediaDiv.className = 'media-item';
+  mediaDiv.innerHTML = `
+    <input type="text" class="mediaLink" placeholder="输入图片 URL 或 Bilibili 嵌入链接">
+    <button type="button" class="removeMediaBtn" style="background-color:#f44336;">移除</button>
+  `;
+  mediaContainer.appendChild(mediaDiv);
+  
+  // 绑定移除媒体项事件
+  mediaDiv.querySelector('.removeMediaBtn').addEventListener('click', function() {
+    mediaContainer.removeChild(mediaDiv);
+  });
 }
 
-// 切换媒体选项
-function toggleMediaOptions(workId) {
-    const mediaType = document.querySelector(`#work${workId} .media-type`).value;
-    const imageContainer = document.getElementById(`imageContainer${workId}`);
-    const videoContainer = document.getElementById(`videoContainer${workId}`);
+// 根据编辑器数据更新预览区内容
+function updatePreview() {
+  // 更新 header 和成员信息
+  document.getElementById('previewHeader').textContent = document.getElementById('headerText').value;
+  document.getElementById('previewMascot').textContent = document.getElementById('mascot').value;
+  document.getElementById('previewMemberName').textContent = document.getElementById('memberName').value;
+  document.getElementById('previewMemberDesc').textContent = document.getElementById('memberDesc').value;
+  
+  // 清空原有作品预览
+  const previewWorks = document.getElementById('previewWorks');
+  previewWorks.innerHTML = '';
+  
+  // 遍历每个作品编辑块，生成预览内容
+  const workEditors = document.querySelectorAll('.work-editor');
+  workEditors.forEach(workEditor => {
+    const workTitle = workEditor.querySelector('.workTitle').value;
+    const workDetails = workEditor.querySelector('.workDetails').value;
     
-    if (mediaType === 'image') {
-        imageContainer.style.display = 'block';
-        videoContainer.style.display = 'none';
-    } else {
-        imageContainer.style.display = 'none';
-        videoContainer.style.display = 'block';
-    }
-}
-
-// 添加图片
-function addImage(workId) {
-    const imageContainer = document.getElementById(`imageContainer${workId}`);
-    const imageCount = imageContainer.querySelectorAll('.image-item').length;
-    const newImageId = imageCount + 1;
+    const workPreviewDiv = document.createElement('div');
+    workPreviewDiv.className = 'work-preview';
     
-    const imageItem = document.createElement('div');
-    imageItem.className = 'image-item';
-    imageItem.innerHTML = `
-        <div class="form-group">
-            <label for="imageTitle${workId}-${newImageId}">图片标题:</label>
-            <input type="text" id="imageTitle${workId}-${newImageId}" placeholder="例如: 图片${newImageId}">
-        </div>
-        <div class="form-group">
-            <label for="imageUrl${workId}-${newImageId}">图片链接:</label>
-            <input type="text" id="imageUrl${workId}-${newImageId}" placeholder="例如: https://example.com/image${newImageId}.jpg">
-        </div>
-        <span class="remove-item" onclick="removeImage(${workId}, ${newImageId})">-</span>
-    `;
+    const h3 = document.createElement('h3');
+    h3.textContent = workTitle;
+    workPreviewDiv.appendChild(h3);
     
-    imageContainer.appendChild(imageItem);
-}
-
-// 删除图片
-function removeImage(workId, imageId) {
-    const imageItem = document.querySelector(`#work${workId} #imageContainer${workId} .image-item:nth-child(${imageId})`);
-    if (imageItem) {
-        imageItem.remove();
-    }
-}
-
-// 添加视频
-function addVideo(workId) {
-    const videoContainer = document.getElementById(`videoContainer${workId}`);
-    const videoCount = videoContainer.querySelectorAll('.video-item').length;
-    const newVideoId = videoCount + 1;
+    const p = document.createElement('p');
+    p.textContent = workDetails;
+    workPreviewDiv.appendChild(p);
     
-    const videoItem = document.createElement('div');
-    videoItem.className = 'video-item';
-    videoItem.innerHTML = `
-        <div class="form-group">
-            <label for="videoLink${workId}-${newVideoId}">Bilibili视频链接:</label>
-            <input type="text" id="videoLink${workId}-${newVideoId}" placeholder="例如: https://www.bilibili.com/video/BVXXXXXXXXXX">
-        </div>
-        <span class="remove-item" onclick="removeVideo(${workId}, ${newVideoId})">-</span>
-    `;
-    
-    videoContainer.appendChild(videoItem);
-}
-
-// 删除视频
-function removeVideo(workId, videoId) {
-    const videoItem = document.querySelector(`#work${workId} #videoContainer${workId} .video-item:nth-child(${videoId})`);
-    if (videoItem) {
-        videoItem.remove();
-    }
-}
-
-// 生成HTML代码
-function generateHTML() {
-    // 获取头部信息
-    const headerTitle = document.getElementById('headerTitle').value || '空';
-    const headerSubtitle = document.getElementById('headerSubtitle').value || '吉祥物';
-    
-    // 获取成员信息
-    const memberName = document.getElementById('memberName').value || '张三';
-    const memberDescription = document.getElementById('memberDescription').value || '我是一名热爱艺术和设计的创作者...';
-    const memberImage = document.getElementById('memberImage').value || 'https://source.unsplash.com/random/400x400/?portrait';
-    
-    // 获取页脚信息
-    const footerContact = document.getElementById('footerContact').value || 'contact@example.com';
-    
-    // 获取所有作品
-    const worksContainer = document.getElementById('worksContainer');
-    const workItems = worksContainer.querySelectorAll('.work-item');
-    
-    let worksHTML = '';
-    
-    workItems.forEach((workItem, index) => {
-        const workId = index + 1;
-        const workTitleInput = workItem.querySelector(`#workTitle${workId}`);
-        const workDescriptionInput = workItem.querySelector(`#workDescription${workId}`);
-        const mediaTypeSelect = workItem.querySelector('.media-type');
-        
-        if (!workTitleInput || !workDescriptionInput || !mediaTypeSelect) {
-            return; // 跳过无效的作品项
-        }
-        
-        const workTitle = workTitleInput.value || `作品 ${workId}`;
-        const workDescription = workDescriptionInput.value || '2023年 | 作品类型 | 尺寸';
-        const mediaType = mediaTypeSelect.value;
-        
-        let mediaHTML = '';
-        
-        if (mediaType === 'image') {
-            const imageContainer = workItem.querySelector(`#imageContainer${workId}`);
-            if (imageContainer) {
-                const imageItems = imageContainer.querySelectorAll('.image-item');
-                
-                imageItems.forEach((imageItem, imgIndex) => {
-                    const imgId = imgIndex + 1;
-                    const imageTitleInput = imageItem.querySelector(`#imageTitle${workId}-${imgId}`);
-                    const imageUrlInput = imageItem.querySelector(`#imageUrl${workId}-${imgId}`);
-                    
-                    if (!imageTitleInput || !imageUrlInput) {
-                        return; // 跳过无效的图片项
-                    }
-                    
-                    const imageTitle = imageTitleInput.value || `图片 ${imgId}`;
-                    const imageUrl = imageUrlInput.value || 'https://source.unsplash.com/random/600x400/?art';
-                    
-                    mediaHTML += `
-                        <div class="work-media-item">
-                            <img src="${imageUrl}" alt="${imageTitle}">
-                            <p>${imageTitle}</p>
-                        </div>
-                    `;
-                });
-            }
+    // 遍历当前作品中的所有媒体链接
+    const mediaLinks = workEditor.querySelectorAll('.mediaLink');
+    mediaLinks.forEach(mediaInput => {
+      const link = mediaInput.value.trim();
+      if (link) {
+        const mediaPreviewDiv = document.createElement('div');
+        mediaPreviewDiv.className = 'media-preview';
+        // 如果链接中含有 "bilibili"，则以 iframe 嵌入视频，否则显示图片
+        if (link.indexOf('bilibili') !== -1) {
+          const iframe = document.createElement('iframe');
+          iframe.src = link;
+          iframe.width = "560";
+          iframe.height = "315";
+          iframe.frameBorder = "0";
+          iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+          iframe.allowFullscreen = true;
+          mediaPreviewDiv.appendChild(iframe);
         } else {
-            const videoContainer = workItem.querySelector(`#videoContainer${workId}`);
-            if (videoContainer) {
-                const videoItems = videoContainer.querySelectorAll('.video-item');
-                
-                videoItems.forEach((videoItem, vidIndex) => {
-                    const vidId = vidIndex + 1;
-                    const videoLinkInput = videoItem.querySelector(`#videoLink${workId}-${vidId}`);
-                    
-                    if (!videoLinkInput) {
-                        return; // 跳过无效的视频项
-                    }
-                    
-                    const videoLink = videoLinkInput.value;
-                    if (videoLink) {
-                        const videoIdMatch = videoLink.match(/video\/(BV\w+)/);
-                        if (videoIdMatch && videoIdMatch[1]) {
-                            const videoId = videoIdMatch[1];
-                            mediaHTML += `
-                                <div class="video-item-container">
-                                    <iframe src="//player.bilibili.com/player.html?bvid=${videoId}" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
-                                </div>
-                            `;
-                        }
-                    }
-                });
-            }
+          const img = document.createElement('img');
+          img.src = link;
+          img.alt = workTitle;
+          mediaPreviewDiv.appendChild(img);
         }
-        
-        worksHTML += `
-            <div class="work-item animate">
-                <h3>${workTitle}</h3>
-                <p>${workDescription}</p>
-                <div class="work-media-container">
-                    ${mediaHTML}
-                </div>
-            </div>
-        `;
+        workPreviewDiv.appendChild(mediaPreviewDiv);
+      }
     });
     
-    // 生成完整的HTML代码
-    const htmlCode = `
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>成员页</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header>
-        <h1>${headerTitle}</h1>
-        <p>${headerSubtitle}</p>
-    </header>
-    
-    <main>
-        <!-- 返回按钮放置在关于我部分上方 -->
-        <a href="../index.html" class="back-button">← 返回首页</a>
-        
-        <section>
-            <h2>关于成员</h2>
-            <div class="item animate">
-                <img src="${memberImage}" alt="个人照片">
-                <h3>${memberName}</h3>
-                <p>${memberDescription}</p>
-            </div>
-        </section>
-        
-        <section>
-            <h2>我的作品</h2>
-            <div class="works-container">
-                ${worksHTML}
-            </div>
-        </section>
-    </main>
-    
-    <footer>
-        <p>联系: <a href="mailto:${footerContact}">${footerContact}</a></p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
-    `;
-    
-    // 显示生成的HTML代码
-    document.getElementById('generatedHTML').textContent = htmlCode;
+    previewWorks.appendChild(workPreviewDiv);
+  });
 }
 
-// 下载HTML文件
+// 根据预览区内容生成完整 HTML 并下载到本地
+// 注意：下载后的 HTML 文件不包含预览时使用的样式文件
 function downloadHTML() {
-    const htmlCode = document.getElementById('generatedHTML').textContent;
-    const blob = new Blob([htmlCode], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'member_page.html';
-    a.click();
-    URL.revokeObjectURL(url);
+  const previewContent = document.getElementById('previewContent').innerHTML;
+  const title = document.getElementById('previewHeader').textContent || "生成页面";
+  const fullHTML = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title}</title>
+</head>
+<body>
+${previewContent}
+</body>
+</html>`;
+  const blob = new Blob([fullHTML], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'generated.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }

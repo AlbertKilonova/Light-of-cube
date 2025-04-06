@@ -1,0 +1,74 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+.editor, .preview {
+  flex: 1;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.editor {
+  background-color: #f9f9f9;
+}
+
+.preview {
+  background-color: #fff;
+}
+
+/* 编辑区域内的输入框和标签 */
+.editor input,
+.editor textarea {
+  width: 100%;
+  padding: 5px;
+  margin: 5px 0 15px;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.editor label {
+  font-weight: bold;
+}
+
+/* 按钮样式 */
+button {
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 4px;
+}
+
+/* 作品编辑块样式 */
+.work-editor,
+.media-item {
+  border: 1px dashed #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.media-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+/* 下载按钮 */
+.download-btn {
+  margin-top: 20px;
+  background-color: #2196F3;
+}
