@@ -44,11 +44,11 @@ function queryOrder() {
         const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
         overdueHTML = `
-          <p><strong>是否超时：</strong> <span class="overdue">已超时</span></p>
+          <p><strong>超时状态：</strong> <span class="overdue">已超时</span></p>
           <p><strong>超时时间：</strong> ${diffDays}天 ${diffHours}小时 ${diffMinutes}分钟</p>
         `;
       } else {
-        overdueHTML = `<p><strong>是否超时：</strong> <span class="on-time">未超时</span></p>`;
+        overdueHTML = `<p><strong>超时状态：</strong> <span class="on-time">未超时</span></p>`;
       }
     }
   }
