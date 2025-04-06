@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML生成器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>HTML生成器</h1>
+    
+    <form id="htmlGenerator">
+        <!-- 头部信息 -->
+        <div class="form-group">
+            <label for="headerTitle">头部标题:</label>
+            <input type="text" id="headerTitle" placeholder="例如: 空">
+        </div>
+        
+        <div class="form-group">
+            <label for="headerSubtitle">头部副标题:</label>
+            <input type="text" id="headerSubtitle" placeholder="例如: 吉祥物">
+        </div>
+        
+        <!-- 成员信息 -->
+        <div class="form-group">
+            <label for="memberName">成员名字:</label>
+            <input type="text" id="memberName" placeholder="例如: 张三" oninput="syncHeaderTitle()">
+        </div>
+        
+        <div class="form-group">
+            <label for="memberDescription">成员描述:</label>
+            <textarea id="memberDescription" rows="4" placeholder="例如: 我是一名热爱艺术和设计的创作者..."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="memberImage">成员照片URL:</label>
+            <input type="text" id="memberImage" placeholder="例如: https://example.com/image.jpg">
+        </div>
+        
+        <!-- 作品部分 -->
+        <div id="worksContainer">
+            <h3>作品信息</h3>
+            <div class="work-item" id="work1">
+                <div class="form-group">
+                    <label for="workTitle1">作品标题:</label>
+                    <input type="text" id="workTitle1" placeholder="例如: 色彩的交响">
+                </div>
+                
+                <div class="form-group">
+                    <label for="workDescription1">作品描述:</label>
+                    <input type="text" id="workDescription1" placeholder="例如: 2023年 | 油画 | 60x80cm">
+                </div>
+                
+                <div class="media-options">
+                    <label>选择媒体类型:</label>
+                    <select class="media-type" onchange="toggleMediaOptions(1)">
+                        <option value="image">图片</option>
+                        <option value="video">视频</option>
+                    </select>
+                </div>
+                
+                <div class="image-container" id="imageContainer1">
+                    <div class="image-item">
+                        <div class="form-group">
+                            <label for="imageTitle1-1">图片标题:</label>
+                            <input type="text" id="imageTitle1-1" placeholder="例如: 图片1">
+                        </div>
+                        <div class="form-group">
+                            <label for="imageUrl1-1">图片链接:</label>
+                            <input type="text" id="imageUrl1-1" placeholder="例如: https://example.com/image1.jpg">
+                        </div>
+                    </div>
+                    <button type="button" onclick="addImage(1)">添加图片</button>
+                </div>
+                
+                <div class="video-container" id="videoContainer1" style="display: none;">
+                    <div class="video-item">
+                        <div class="form-group">
+                            <label for="videoLink1-1">Bilibili视频链接:</label>
+                            <input type="text" id="videoLink1-1" placeholder="例如: https://www.bilibili.com/video/BVXXXXXXXXXX">
+                        </div>
+                    </div>
+                    <button type="button" onclick="addVideo(1)">添加视频</button>
+                </div>
+            </div>
+        </div>
+        
+        <button type="button" class="add-work" onclick="addWork()">添加作品</button>
+        
+        <!-- 页脚信息 -->
+        <div class="form-group">
+            <label for="footerContact">页脚联系信息:</label>
+            <input type="text" id="footerContact" placeholder="例如: contact@example.com">
+        </div>
+        
+        <button type="button" onclick="generateHTML()">生成HTML</button>
+    </form>
+    
+    <div class="preview" id="preview">
+        <h2>生成的HTML代码</h2>
+        <pre id="generatedHTML"></pre>
+        <button type="button" onclick="downloadHTML()">下载HTML文件</button>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
