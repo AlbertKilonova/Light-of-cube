@@ -1,15 +1,9 @@
 [
   {
-    "type": "image",
-    "title": "静物习作",
-    "src": "images/work1.jpg",
-    "description": "水彩静物练习"
-  },
-  {
     "type": "video",
-    "title": "速写演示",
-    "src": "//player.bilibili.com/player.html?bvid=BV1xx411c7eN&autoplay=0",
-    "description": "老师的速写演示视频"
+    "title": "P.H.",
+    "src": "//player.bilibili.com/player.html?isOutside=true&aid=114127498380883&bvid=BV1XrRWYeEEF&cid=28765916964&p=1",
+    "description": "牢桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉桉的文字pv！"
   },
   {
     "type": "image",
@@ -20,7 +14,7 @@
   {
     "type": "video",
     "title": "video",
-    "src": "//player.bilibili.com/player.html?isOutside=true&aid=113933570605497&bvid=BV1NbF6ejELr&cid=28186182208&p=1",
+    "src": "//player.bilibili.com/player.html?isOutside=true&aid=&bvid=&cid=&p=1",
     "description": "测试"
   }
 ]
