@@ -124,7 +124,6 @@ h2:hover::after {
 .work-item {
   background: #fff;
   padding: 15px;
-  width: calc(33.33% - 22px);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   transition: all 0.3s ease;
@@ -170,7 +169,6 @@ h2:hover::after {
 .artist-item {
   background: #fff;
   padding: 20px;
-  width: calc(25% - 22px);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   text-align: center;
@@ -207,20 +205,45 @@ h2:hover::after {
   font-size: 0.9em;
 }
 
-/* 响应式设计 */
-@media (max-width: 992px) {
-  .work-item, .artist-item {
-    width: calc(50% - 22px);
+/* PC端多列优化 */
+@media (min-width: 1200px) {
+  /* Works优化 */
+  .work-item {
+    width: calc(25% - 16px);
+  }
+  
+  /* Artists优化 */
+  .artist-item {
+    width: calc(20% - 16px);
   }
 }
 
-@media (max-width: 768px) {
-  header, footer {
-    padding: 20px 0;
+/* 中等屏幕优化 */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .work-item {
+    width: calc(33.33% - 14px);
   }
   
+  .artist-item {
+    width: calc(25% - 14px);
+  }
+}
+
+/* 小屏幕优化 */
+@media (min-width: 768px) and (max-width: 991px) {
+  .work-item {
+    width: calc(50% - 10px);
+  }
+  
+  .artist-item {
+    width: calc(33.33% - 10px);
+  }
+}
+
+/* 移动端单列优化 */
+@media (max-width: 767px) {
   .work-item, .artist-item {
-    width: calc(100% - 22px);
+    width: 100%;
     margin-bottom: 20px;
   }
   
@@ -229,6 +252,7 @@ h2:hover::after {
   }
 }
 
+/* 响应式设计 */
 @media (max-width: 480px) {
   main {
     padding: 20px 10px;
