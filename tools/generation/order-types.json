@@ -1,32 +1,27 @@
 {
     "绘画": {
         "code": "PAINT",
-        "subtypes": ["插画", "漫画", "壁纸", "头像", "概念设计"],
-        "allowedPositions": ["digital_artist", "senior_artist", "multi_artist"]
+        "subtypes": ["插画", "漫画", "半身", "头像", "立绘", "OC", "概念设计"],
+        "allowedPositions": ["animation", "President", "mascot"]
     },
     "动画": {
         "code": "ANIM",
-        "subtypes": ["短片", "广告", "MV", "GIF", "动态效果"],
-        "allowedPositions": ["animation_artist", "senior_artist", "multi_artist"]
+        "subtypes": ["特效", "手书", "MV", "视效", "火柴人逐帧", "MG动画", "meme" ,"动态LOGO"],
+        "allowedPositions": ["animation", "mascot"]
     },
     "cos": {
         "code": "COS",
-        "subtypes": ["角色设计", "服装设计", "道具设计", "妆容设计"],
-        "allowedPositions": ["cos_artist", "senior_artist"]
+        "subtypes": [],
+        "allowedPositions": []
     },
     "配音": {
         "code": "VOICE",
         "subtypes": ["角色配音", "旁白", "音效设计", "音效合成"],
-        "allowedPositions": ["voice_artist"]
+        "allowedPositions": ["animation","dub"]
     },
     "设计": {
         "code": "DESIGN",
-        "subtypes": ["UI设计", "产品设计", "包装设计", "海报设计"],
-        "allowedPositions": ["digital_artist", "senior_artist", "multi_artist"]
-    },
-    "其他": {
-        "code": "OTHER",
-        "subtypes": ["艺术指导", "创意咨询", "教学服务", "定制服务"],
-        "allowedPositions": ["multi_artist"]
+        "subtypes": ["UI设计", "角色设计", "LOGO设计", "海报设计"],
+        "allowedPositions": ["animation"]
     }
 }
