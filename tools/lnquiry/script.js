@@ -28,25 +28,28 @@ function queryOrder() {
     return;
   }
 
-  // 判断是否超时并计算超时时间
+// 判断是否超时并计算超时时间
   let overdueHTML = '';
   if (found.timeline?.deadline) {
-    const now = new Date();
-    const deadline = new Date(found.timeline.deadline);
-    const isOverdue = now > deadline;
+    // 如果 deadline 为 true，则不计算超时
+    if (!found.deadline) {
+      const now = new Date();
+      const deadline = new Date(found.timeline.deadline);
+      const isOverdue = now > deadline;
 
-    if (isOverdue) {
-      const diffMs = now - deadline;
-      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-      const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      if (isOverdue) {
+        const diffMs = now - deadline;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
-      overdueHTML = `
-        <p><strong>超时状态：</strong> <span class="overdue">已超时</span></p>
-        <p><strong>已超时：</strong> ${diffDays}天 ${diffHours}小时 ${diffMinutes}分钟</p>
-      `;
-    } else {
-      overdueHTML = `<p><strong>超时状态：</strong> <span class="on-time">未超时</span></p>`;
+        overdueHTML = `
+          <p><strong>是否超时：</strong> <span class="overdue">已超时</span></p>
+          <p><strong>超时时间：</strong> ${diffDays}天 ${diffHours}小时 ${diffMinutes}分钟</p>
+        `;
+      } else {
+        overdueHTML = `<p><strong>是否超时：</strong> <span class="on-time">未超时</span></p>`;
+      }
     }
   }
 
