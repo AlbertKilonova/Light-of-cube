@@ -1,6 +1,6 @@
 [
 {
-  "orderId": "GL-ANIM-20250406-843472-751-GIeZDu",
+  "orderId": "GL-PAINT-20250406-920712-751-nA1wRi",
   "artist": {
     "id": "751",
     "name": "AlbertKilonova"
@@ -8,10 +8,17 @@
   "type": "动画",
   "subtype": "动态LOGO",
   "timeline": {
-    "orderTime": "2025-04-05T14:08",
-    "scheduled": "2025-04-05T15:44",
-    "deadline": "2025-04-06T15:01"
+    "orderTime": "2025-04-06T16:41",
+    "deadline": "2030-04-06T16:41"
   },
-  "completed": true
-}
-]
+  "client": {
+    "name": "秋野春初"
+  },
+  "business": {
+    "details": "三月初春，文字LOGO动画",
+    "price": "10",
+    "commissionType": "包抽成"
+  },
+  "deadline": true,
+  "payment": true
+}]
