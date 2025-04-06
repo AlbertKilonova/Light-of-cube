@@ -112,6 +112,26 @@ h2:hover::after {
   transform: scale(1.02);
 }
 
+/* about */
+.item {
+  background: #fff;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.item p {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
 /* Works */
 .works-container {
   display: flex;
