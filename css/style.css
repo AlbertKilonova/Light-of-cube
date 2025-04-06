@@ -148,6 +148,7 @@ h2:hover::after {
   border-radius: 8px;
   transition: all 0.3s ease;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .work-item:hover {
@@ -173,6 +174,74 @@ h2:hover::after {
 .work-item p {
   color: #7f8c8d;
   font-size: 0.9em;
+}
+
+/* 横向滚动内容 */
+.work-media-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #4a69bd #e0e0e0;
+}
+
+.work-media-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.work-media-container::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+.work-media-container::-webkit-scrollbar-thumb {
+  background-color: #4a69bd;
+  border-radius: 10px;
+}
+
+.work-media-item {
+  flex: 0 0 auto;
+  width: 100%;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.work-media-item:hover {
+  transform: scale(1.05);
+}
+
+.work-media-item img, .work-media-item iframe {
+  width: 100%;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+/* 单个作品充满整个板块 */
+.single-work {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.single-work .work-item {
+  width: 100%;
+  max-width: 800px;
+}
+
+/* 响应式设计 */
+@media (max-width: 767px) {
+  .work-media-item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .work-media-item {
+    width: 100%;
+  }
 }
 
 /* Artists */
