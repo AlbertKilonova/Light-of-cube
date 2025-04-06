@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>订单查询器</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .form-group {
+      margin: 15px 0;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+      color: #555;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 6px;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result {
+      margin-top: 20px;
+      background: #f1f1f1;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .overdue {
+      color: red;
+      font-weight: bold;
+    }
+    .on-time {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>订单信息查询</h2>
+    <div class="form-group">
+      <label for="orderId">请输入订单ID：</label>
+      <input type="text" id="orderId" placeholder="如：GL-ANIM-20250406-640020-751-5WVlz3">
+    </div>
+    <button onclick="queryOrder()">查询订单</button>
+
+    <div class="result" id="resultBox" style="display:none;"></div>
+  </div>
+
+  <script>
+    let orders = [];
+
+    // 加载同级目录下的 JSON 文件
+    fetch('orders.json')
+      .then(res => res.json())
+      .then(data => {
+        orders = Array.isArray(data) ? data : [data];
+      })
+      .catch(err => {
+        alert('加载 orders.json 失败，请确保文件存在并使用本地服务器访问。');
+        console.error(err);
+      });
+
+    function queryOrder() {
+      const inputId = document.getElementById('orderId').value.trim();
+      const resultBox = document.getElementById('resultBox');
+      resultBox.style.display = 'block';
+
+      if (!inputId) {
+        resultBox.innerHTML = '<p>请输入订单ID</p>';
+        return;
+      }
+
+      const found = orders.find(o => o.orderId === inputId);
+
+      if (!found) {
+        resultBox.innerHTML = `<p>未找到订单 ID 为 <strong>${inputId}</strong> 的订单。</p>`;
+        return;
+      }
+
+      // 判断是否超时（只对未完成订单判断）
+      let overdueHTML = '';
+      if (!found.completed && found.timeline?.deadline) {
+        const now = new Date();
+        const deadline = new Date(found.timeline.deadline);
+        const isOverdue = now > deadline;
+
+        overdueHTML = `<p><strong>是否超时：</strong> <span class="${isOverdue ? 'overdue' : 'on-time'}">
+          ${isOverdue ? '已超时' : '未超时'}
+        </span></p>`;
+      }
+
+      resultBox.innerHTML = `
+        <h3>订单 ID：${found.orderId}</h3>
+        <p><strong>画师：</strong>${found.artist?.name}（ID: ${found.artist?.id}）</p>
+        <p><strong>类型：</strong>${found.type} - ${found.subtype}</p>
+        <p><strong>下单时间：</strong>${found.timeline?.orderTime}</p>
+        <p><strong>排期时间：</strong>${found.timeline?.scheduled}</p>
+        <p><strong>截止时间：</strong>${found.timeline?.deadline}</p>
+        <p><strong>完成状态：</strong>${found.completed ? '已完成' : '未完成'}</p>
+        ${overdueHTML}
+      `;
+    }
+  </script>
+</body>
+</html>

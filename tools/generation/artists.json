@@ -1,0 +1,50 @@
+[
+  {
+    "id": "609",
+    "name": "霜月",
+    "position": "President",
+    "allowedTypes": ["绘画","写作"]
+  },
+  {
+    "id": "000",
+    "name": "空",
+    "position": "mascot",
+    "allowedTypes": ["绘画","动画"]
+  },
+  {
+    "id": "751",
+    "name": "AlbertKilonova",
+    "position": "animation",
+    "allowedTypes": ["动画"]
+  },
+  {
+    "id": "111",
+    "name": "Espoir",
+    "position": "dub",
+    "allowedTypes": ["配音"]
+  },
+  {
+    "id": "250",
+    "name": "麦克",
+    "position": "animation",
+    "allowedTypes": ["动画"]
+  },
+  {
+    "id": "775",
+    "name": "番个茄",
+    "position": "animation",
+    "allowedTypes": ["动画"]
+  },
+  {
+    "id": "360",
+    "name": "秋野春初",
+    "position": "dub",
+    "allowedTypes": ["配音"]
+  },
+  {
+    "id": "007",
+    "name": "Anming",
+    "position": "animation",
+    "allowedTypes": ["动画", "设计"]
+  }
+] 

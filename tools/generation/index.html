@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光之立方画社订单生成器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>光之立方画社订单生成器</h1>
+        
+        <div class="form-group">
+            <label for="artist-id">画师ID (三位整数)</label>
+            <input type="text" id="artist-id" placeholder="请输入画师ID">
+            <div id="artist-id-error" class="error"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="order-type">订单类型</label>
+            <select id="order-type" disabled>
+                <option value="">加载中...</option>
+            </select>
+        </div>
+        
+        <div class="form-group" id="subtype-container" style="display: none;">
+            <label for="order-subtype">订单子类型</label>
+            <select id="order-subtype" disabled>
+                <option value="">请先选择订单类型</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="order-time">下单时间</label>
+            <input type="datetime-local" id="order-time">
+            <div id="order-time-error" class="error"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="scheduled-time">预计排到时间</label>
+            <input type="datetime-local" id="scheduled-time">
+            <div id="scheduled-time-error" class="error"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="deadline-time">截稿时间</label>
+            <input type="datetime-local" id="deadline-time">
+            <div id="deadline-time-error" class="error"></div>
+        </div>
+        
+        <button id="generate-btn" disabled>生成订单</button>
+        
+        <div class="order-result" id="order-result">
+            <h2>订单信息</h2>
+            <div class="order-details" id="order-details">
+                <!-- 订单信息将在这里显示 -->
+            </div>
+            <button class="copy-btn" id="copy-btn">复制订单ID</button>
+            <button class="save-btn" id="save-json-btn">保存订单JSON</button>
+            <button class="save-btn" id="save-image-btn">保存订单图片</button>
+        </div>
+        
+        <div class="loading" id="loading">正在加载数据...</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
