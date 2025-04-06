@@ -1,0 +1,44 @@
+[
+  {
+    "id": "000",
+    "name": "空",
+    "position": "system",
+    "allowedTypes": []
+  },
+  {
+    "id": "751",
+    "name": "AlbertKilonova",
+    "position": "digital_artist",
+    "allowedTypes": ["绘画", "设计"]
+  },
+  {
+    "id": "111",
+    "name": "Espoir",
+    "position": "animation_artist",
+    "allowedTypes": ["动画", "cos"]
+  },
+  {
+    "id": "250",
+    "name": "麦克",
+    "position": "senior_artist",
+    "allowedTypes": ["绘画", "动画", "设计"]
+  },
+  {
+    "id": "775",
+    "name": "番个茄",
+    "position": "voice_artist",
+    "allowedTypes": ["配音"]
+  },
+  {
+    "id": "360",
+    "name": "秋野春初",
+    "position": "cos_artist",
+    "allowedTypes": ["cos"]
+  },
+  {
+    "id": "007",
+    "name": "Anming",
+    "position": "multi_artist",
+    "allowedTypes": ["绘画", "动画", "设计", "其他"]
+  }
+]

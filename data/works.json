@@ -1,0 +1,20 @@
+[
+  {
+    "type": "image",
+    "title": "静物习作",
+    "src": "images/work1.jpg",
+    "description": "水彩静物练习"
+  },
+  {
+    "type": "video",
+    "title": "速写演示",
+    "src": "https://player.bilibili.com/player.html?bvid=BV1xx411c7eN&autoplay=0",
+    "description": "老师的速写演示视频"
+  },
+  {
+    "type": "image",
+    "title": "油画风景",
+    "src": "images/work3.jpg",
+    "description": "油画风格风景创作"
+  }
+]
