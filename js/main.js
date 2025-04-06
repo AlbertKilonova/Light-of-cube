@@ -4,28 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
   loadArtists();
 });
 
-// 创建加载动画
-function createLoadingAnimation() {
-  const loadingAnimation = document.createElement("div");
-  loadingAnimation.id = "loadingAnimation";
-  loadingAnimation.innerHTML = `
-    <div class="spinner"></div>
-    <p>正在加载...</p>
-  `;
-  document.body.appendChild(loadingAnimation);
-  loadingAnimation.classList.add("show");
-  
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      loadingAnimation.classList.remove("show");
-      setTimeout(() => {
-        document.body.removeChild(loadingAnimation);
-        resolve();
-      }, 300);
-    }, 1000);
-  });
-}
-
 // 加载轮播作品数据并生成轮播效果
 function loadCarousel() {
   fetch("data/carousel.json")
@@ -95,7 +73,7 @@ function loadWorks() {
     });
 }
 
-// 加载艺术家数据并生成艺术家列表，点击卡片触发动画后跳转
+// 加载艺术家数据并生成艺术家列表，点击卡片跳转到对应详情页
 function loadArtists() {
   fetch("data/artists.json")
     .then(res => res.json())
@@ -108,9 +86,10 @@ function loadArtists() {
         item.classList.add("animate");
         item.style.animationDelay = `${i * 0.2}s`;
 
-        // 创建链接，点击后触发动画并跳转
+        // 创建链接，点击后跳转到对应 artist.id 的 HTML 文件（例如 artists/007.html）
         const link = document.createElement("a");
         link.href = `artists/${artist.id}.html`;
+        // 移除默认链接样式
         link.style.textDecoration = "none";
         link.style.color = "inherit";
         link.innerHTML = `
@@ -118,27 +97,6 @@ function loadArtists() {
           <p>职位：${artist.position}</p>
           <p>擅长：${artist.allowedTypes.join("、") || "无"}</p>
         `;
-
-        // 点击事件：触发动画后跳转
-        link.addEventListener("click", function (e) {
-          e.preventDefault(); // 阻止默认跳转行为
-
-          // 获取所有艺术家卡片
-          const allArtists = document.querySelectorAll(".artist-item");
-          
-          // 依次给每个卡片添加淡出动画
-          allArtists.forEach((card, index) => {
-            setTimeout(() => {
-              card.classList.add("fade-out"); // 添加淡出动画类
-            }, index * 100); // 每个卡片间隔 100ms 动画
-          });
-
-          // 动画完成后跳转
-          setTimeout(() => {
-            window.location.href = `artists/${artist.id}.html`;
-          }, allArtists.length * 100 + 500); // 动画总时长 + 缓冲时间
-        });
-
         item.appendChild(link);
         container.appendChild(item);
       });
