@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   loadCarousel();
   loadWorks();
   loadArtists();
@@ -13,7 +13,7 @@ function loadCarousel() {
       data.forEach((item, i) => {
         const slide = document.createElement("div");
         slide.className = "carousel-slide";
-        // 设置入场动画及时差 delay
+        // 设置入场动画与时差 delay
         slide.classList.add("animate");
         slide.style.animationDelay = `${i * 0.3}s`;
         slide.innerHTML = `
@@ -73,7 +73,7 @@ function loadWorks() {
     });
 }
 
-// 加载艺术家数据并生成艺术家列表
+// 加载艺术家数据并生成艺术家列表，点击卡片跳转到对应详情页
 function loadArtists() {
   fetch("data/artists.json")
     .then(res => res.json())
@@ -82,14 +82,22 @@ function loadArtists() {
       data.forEach((artist, i) => {
         const item = document.createElement("li");
         item.className = "artist-item";
-        // 添加入场动画及时差效果
+        // 添加入场动画与时差效果
         item.classList.add("animate");
         item.style.animationDelay = `${i * 0.2}s`;
-        item.innerHTML = `
+
+        // 创建链接，点击后跳转到对应 artist.id 的 HTML 文件（例如 artists/007.html）
+        const link = document.createElement("a");
+        link.href = `artists/${artist.id}.html`;
+        // 移除默认链接样式
+        link.style.textDecoration = "none";
+        link.style.color = "inherit";
+        link.innerHTML = `
           <h3>${artist.name}</h3>
           <p>职位：${artist.position}</p>
           <p>擅长：${artist.allowedTypes.join("、") || "无"}</p>
         `;
+        item.appendChild(link);
         container.appendChild(item);
       });
     })
