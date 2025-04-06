@@ -11,18 +11,53 @@
     ]
   },
   {
-    "title": "油画风景",
-    "description": "油画风格风景创作",
+    "title": "冬至随笔",
+    "description": "乱七八糟的文稿",
     "media": [
       {
         "type": "image",
-        "src": "images/work3.jpg",
-        "alt": "油画风景1"
+        "src": "./images/winter-solstice-notes/0.png",
+        "alt": "冬至随笔0"
       },
       {
         "type": "image",
-        "src": "images/work4.jpg",
-        "alt": "油画风景2"
+        "src": "./images/winter-solstice-notes/1.png",
+        "alt": "冬至随笔"
+      },
+      {
+        "type": "image",
+        "src": "./images/winter-solstice-notes/2.png",
+        "alt": "冬至随笔2"
+      },
+      {
+        "type": "image",
+        "src": "./images/winter-solstice-notes/3.png",
+        "alt": "冬至随笔3"
+      },
+      {
+        "type": "image",
+        "src": "./images/winter-solstice-notes/4.png",
+        "alt": "冬至随笔4"
+      },
+      {
+        "type": "image",
+        "src": "./images/winter-solstice-notes/5.png",
+        "alt": "冬至随笔5"
+      },
+      {
+        "type": "image",
+        "src": "./images/winter-solstice-notes/6.png",
+        "alt": "冬至随笔6"
+      },
+      {
+        "type": "image",
+        "src": "./images/winter-solstice-notes/7.png",
+        "alt": "冬至随笔7"
+      },
+      {
+        "type": "image",
+        "src": "./images/winter-solstice-notes/0.png",
+        "alt": "冬至随笔8"
       }
     ]
   },
