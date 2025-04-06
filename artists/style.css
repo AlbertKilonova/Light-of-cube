@@ -1,0 +1,267 @@
+/* 基础样式 */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+  margin: 0;
+  padding: 0;
+  color: #333;
+  line-height: 1.6;
+}
+
+header, footer {
+  background-color: #2c3e50;
+  color: #fff;
+  padding: 25px 0;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header {
+  background: linear-gradient(to right, #2c3e50, #4a69bd);
+  position: relative;
+}
+
+footer {
+  background: linear-gradient(to right, #2c3e50, #34495e);
+  margin-top: 40px;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+h2 {
+  border-bottom: 2px solid #000;
+  padding-bottom: 8px;
+  margin-bottom: 25px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+h2:hover {
+  border-bottom-color: #4a69bd;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 3px;
+  background: #4a69bd;
+  bottom: -2px;
+  left: 0;
+  transition: all 0.3s ease;
+}
+
+h2:hover::after {
+  width: 100%;
+}
+
+/* 返回按钮 */
+.back-button {
+  position: absolute;
+  top: 25px;
+  left: 20px;
+  background-color: #4a69bd;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.back-button:hover {
+  background-color: #3498db;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 入场动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate {
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+  animation-delay: 0.2s;
+}
+
+/* about */
+.item {
+  background: #fff;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.item p {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+/* Works */
+.works-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.work-item {
+  background: #fff;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.work-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.work-item img, .work-item iframe {
+  width: 100%;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.work-item:hover img, .work-item:hover iframe {
+  transform: scale(1.05);
+}
+
+.work-item h3 {
+  margin: 15px 0 8px;
+  color: #2c3e50;
+}
+
+.work-item p {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+/* Artists */
+#artistList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.artist-item {
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.artist-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.artist-item img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  border: 3px solid #4a69bd;
+  transition: all 0.3s ease;
+}
+
+.artist-item:hover img {
+  border-color: #3498db;
+  transform: scale(1.05);
+}
+
+.artist-item h3 {
+  margin: 0 0 8px;
+  color: #2c3e50;
+}
+
+.artist-item p {
+  color: #7f8c8d;
+  font-size: 0.9em;
+}
+
+/* PC端多列优化 */
+@media (min-width: 1200px) {
+  /* Works优化 */
+  .work-item {
+    width: calc(25% - 16px);
+  }
+  
+  /* Artists优化 */
+  .artist-item {
+    width: calc(20% - 16px);
+  }
+}
+
+/* 中等屏幕优化 */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .work-item {
+    width: calc(33.33% - 14px);
+  }
+  
+  .artist-item {
+    width: calc(25% - 14px);
+  }
+}
+
+/* 小屏幕优化 */
+@media (min-width: 768px) and (max-width: 991px) {
+  .work-item {
+    width: calc(50% - 10px);
+  }
+  
+  .artist-item {
+    width: calc(33.33% - 10px);
+  }
+}
+
+/* 移动端单列优化 */
+@media (max-width: 767px) {
+  .work-item, .artist-item {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  main {
+    padding: 20px 10px;
+  }
+  
+  h2 {
+    font-size: 1.5em;
+  }
+}
