@@ -43,6 +43,7 @@ function addWork() {
                     <label for="imageUrl${newWorkId}-1">图片链接:</label>
                     <input type="text" id="imageUrl${newWorkId}-1" placeholder="例如: https://example.com/image1.jpg">
                 </div>
+                <span class="remove-item" onclick="removeImage(${newWorkId}, 1)">-</span>
             </div>
             <button type="button" onclick="addImage(${newWorkId})">添加图片</button>
         </div>
@@ -53,6 +54,7 @@ function addWork() {
                     <label for="videoLink${newWorkId}-1">Bilibili视频链接:</label>
                     <input type="text" id="videoLink${newWorkId}-1" placeholder="例如: https://www.bilibili.com/video/BVXXXXXXXXXX">
                 </div>
+                <span class="remove-item" onclick="removeVideo(${newWorkId}, 1)">-</span>
             </div>
             <button type="button" onclick="addVideo(${newWorkId})">添加视频</button>
         </div>
