@@ -2,43 +2,49 @@
   {
     "id": "000",
     "name": "空",
-    "position": "system",
+    "position": "mascot",
     "allowedTypes": []
   },
   {
     "id": "751",
     "name": "AlbertKilonova",
-    "position": "digital_artist",
+    "position": "animation",
     "allowedTypes": ["绘画", "设计"]
   },
   {
     "id": "111",
     "name": "Espoir",
-    "position": "animation_artist",
+    "position": "dub",
     "allowedTypes": ["动画", "cos"]
   },
   {
     "id": "250",
     "name": "麦克",
-    "position": "senior_artist",
+    "position": "animation",
     "allowedTypes": ["绘画", "动画", "设计"]
   },
   {
     "id": "775",
     "name": "番个茄",
-    "position": "voice_artist",
+    "position": "animation",
     "allowedTypes": ["配音"]
   },
   {
     "id": "360",
     "name": "秋野春初",
-    "position": "cos_artist",
+    "position": "dub",
     "allowedTypes": ["cos"]
   },
   {
     "id": "007",
     "name": "Anming",
-    "position": "multi_artist",
+    "position": "animation",
     "allowedTypes": ["绘画", "动画", "设计", "其他"]
+  },
+  {
+    "id": "609",
+    "name": "霜月",
+    "position": "President",
+    "allowedTypes": []
   }
-]
+] 
