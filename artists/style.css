@@ -18,7 +18,6 @@ header, footer {
 
 header {
   background: linear-gradient(to right, #2c3e50, #4a69bd);
-  position: relative;
 }
 
 footer {
@@ -59,7 +58,6 @@ h2:hover::after {
   width: 100%;
 }
 
-/* 返回按钮 */
 .back-button {
   display: inline-block;
   background-color: #4a69bd;
@@ -98,6 +96,40 @@ h2:hover::after {
   animation-delay: 0.2s;
 }
 
+/* Carousel */
+.carousel-container {
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
+  margin-bottom: 40px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-slide {
+  display: none;
+  text-align: center;
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.carousel-slide.active {
+  display: block;
+  opacity: 1;
+}
+
+.carousel-slide img {
+  width: 100%;
+  max-height: 450px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.carousel-slide img:hover {
+  transform: scale(1.02);
+}
+
 /* about */
 .item {
   background: #fff;
@@ -134,6 +166,7 @@ h2:hover::after {
   border-radius: 8px;
   transition: all 0.3s ease;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 
 .work-item:hover {
@@ -159,6 +192,74 @@ h2:hover::after {
 .work-item p {
   color: #7f8c8d;
   font-size: 0.9em;
+}
+
+/* 横向滚动内容 */
+.work-media-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #4a69bd #e0e0e0;
+}
+
+.work-media-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.work-media-container::-webkit-scrollbar-track {
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+.work-media-container::-webkit-scrollbar-thumb {
+  background-color: #4a69bd;
+  border-radius: 10px;
+}
+
+.work-media-item {
+  flex: 0 0 auto;
+  width: 100%;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.work-media-item:hover {
+  transform: scale(1.05);
+}
+
+.work-media-item img, .work-media-item iframe {
+  width: 100%;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+/* 单个作品充满整个板块 */
+.single-work {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.single-work .work-item {
+  width: 100%;
+  max-width: 800px;
+}
+
+/* 响应式设计 */
+@media (max-width: 767px) {
+  .work-media-item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .work-media-item {
+    width: 100%;
+  }
 }
 
 /* Artists */
@@ -252,6 +353,10 @@ h2:hover::after {
     width: 100%;
     margin-bottom: 20px;
   }
+  
+  .carousel-slide img {
+    max-height: 300px;
+  }
 }
 
 /* 响应式设计 */
@@ -262,5 +367,9 @@ h2:hover::after {
   
   h2 {
     font-size: 1.5em;
+  }
+  
+  .carousel-slide img {
+    max-height: 250px;
   }
 }
