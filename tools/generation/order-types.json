@@ -11,7 +11,7 @@
     },
     "cos": {
         "code": "COS",
-        "subtypes": [],
+        "subtypes": ["角色扮演", "原创角色", "舞台剧"],
         "allowedPositions": ["cosplayer"]
     },
     "配音": {
