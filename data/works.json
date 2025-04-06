@@ -60,16 +60,5 @@
         "alt": "冬至随笔8"
       }
     ]
-  },
-  {
-    "title": "测试",
-    "description": "测试",
-    "media": [
-      {
-        "type": "video",
-        "src": "//player.bilibili.com/player.html?isOutside=true&aid=&bvid=&cid=&p=1",
-        "alt": "测试视频"
-      }
-    ]
   }
 ]
