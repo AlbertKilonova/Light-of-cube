@@ -61,9 +61,7 @@ h2:hover::after {
 
 /* 返回按钮 */
 .back-button {
-  position: absolute;
-  top: 25px;
-  left: 20px;
+  display: inline-block;
   background-color: #4a69bd;
   color: white;
   padding: 8px 15px;
@@ -71,6 +69,7 @@ h2:hover::after {
   text-decoration: none;
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
 }
 
 .back-button:hover {
