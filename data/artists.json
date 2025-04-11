@@ -46,5 +46,11 @@
     "name": "Anming",
     "position": "animation",
     "allowedTypes": ["动画", "设计"]
+  },
+  {
+    "id": "748",
+    "name": "冬至",
+    "position": "writers",
+    "allowedTypes": ["写手"]
   }
 ] 
