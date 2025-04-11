@@ -144,10 +144,8 @@ async function downloadHTML() {
     <section>
       <h2>关于成员</h2>
       <div class="item animate">
-        <img src="https://source.unsplash.com/random/400x400/?portrait" alt="个人照片" style="width: 150px; height: 150px; border-radius: 50%; margin-bottom: 15px;">
         <h3 id="previewMemberName">${document.getElementById('previewMemberName').textContent || "张三"}</h3>
         <p id="previewMemberDesc">${document.getElementById('previewMemberDesc').textContent || "我是一名热爱艺术和设计的创作者，专注于数字艺术、平面设计和摄影。我的作品融合了传统技法与现代技术，致力于创造既有视觉冲击力又富有内涵的艺术表达。"}</p>
-        <p>通过这个网站，我希望能够分享我的创作历程，展示我的作品，并与志同道合的艺术家和爱好者交流。</p>
       </div>
     </section>
     <section>
