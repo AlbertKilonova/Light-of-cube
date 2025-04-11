@@ -55,13 +55,16 @@ function addMedia(workDiv) {
   });
 }
 
-// 更新预览内容
+// 更新预览内容，包括头部和作品列表
 function updatePreview() {
+  // 更新头部信息
   document.getElementById('previewHeader').textContent = document.getElementById('headerText').value;
   document.getElementById('previewMascot').textContent = document.getElementById('mascot').value;
+  // 更新关于成员信息
   document.getElementById('previewMemberName').textContent = document.getElementById('memberName').value;
   document.getElementById('previewMemberDesc').textContent = document.getElementById('memberDesc').value;
 
+  // 生成作品预览内容，结构和类名按照 000.html 示例生成
   const previewWorks = document.getElementById('previewWorks');
   previewWorks.innerHTML = '';
 
@@ -70,23 +73,29 @@ function updatePreview() {
     const workTitle = workEditor.querySelector('.workTitle').value;
     const workDetails = workEditor.querySelector('.workDetails').value;
 
-    const workPreviewDiv = document.createElement('div');
-    workPreviewDiv.className = 'work-preview';
+    // 使用与示例相同的结构和类名
+    const workItem = document.createElement('div');
+    workItem.className = 'work-item animate';
 
     const h3 = document.createElement('h3');
     h3.textContent = workTitle;
-    workPreviewDiv.appendChild(h3);
+    workItem.appendChild(h3);
 
     const p = document.createElement('p');
     p.textContent = workDetails;
-    workPreviewDiv.appendChild(p);
+    workItem.appendChild(p);
 
+    // 媒体内容容器
+    const mediaContainer = document.createElement('div');
+    mediaContainer.className = 'work-media-container';
+
+    // 生成媒体项目，统一放入 work-media-container 中
     const mediaLinks = workEditor.querySelectorAll('.mediaLink');
     mediaLinks.forEach(mediaInput => {
       const link = mediaInput.value.trim();
       if (link) {
-        const mediaPreviewDiv = document.createElement('div');
-        mediaPreviewDiv.className = 'media-preview';
+        const mediaItem = document.createElement('div');
+        mediaItem.className = 'work-media-item';
         if (link.indexOf('bilibili') !== -1) {
           const iframe = document.createElement('iframe');
           iframe.src = link;
@@ -95,49 +104,74 @@ function updatePreview() {
           iframe.frameBorder = "0";
           iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
           iframe.allowFullscreen = true;
-          mediaPreviewDiv.appendChild(iframe);
+          mediaItem.appendChild(iframe);
         } else {
           const img = document.createElement('img');
           img.src = link;
           img.alt = workTitle;
-          mediaPreviewDiv.appendChild(img);
+          mediaItem.appendChild(img);
         }
-        workPreviewDiv.appendChild(mediaPreviewDiv);
+        mediaContainer.appendChild(mediaItem);
       }
     });
 
-    previewWorks.appendChild(workPreviewDiv);
+    workItem.appendChild(mediaContainer);
+    previewWorks.appendChild(workItem);
   });
 }
 
-// 下载 ZIP 包含 HTML + 每个作品 JSON
+// 下载 ZIP 包含生成的 HTML 文件及每个作品对应的 JSON 数据
 async function downloadHTML() {
   const zip = new JSZip();
 
-  const previewContent = document.getElementById('previewContent').innerHTML;
-  const title = document.getElementById('previewHeader').textContent || "生成页面";
+  // 根据页面预览生成符合 000.html 结构的完整 HTML 字符串
+  const titleText = "成员页"; // 固定标题，也可根据需要动态设置
   const fullHTML = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
+  <title>${titleText}</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-${previewContent}
-<script src="script.js"></script>
+  <header>
+    <h1 id="previewHeader">${document.getElementById('previewHeader').textContent || "空"}</h1>
+    <p id="previewMascot">${document.getElementById('previewMascot').textContent || "吉祥物"}</p>
+  </header>
+  <main>
+    <a href="../index.html" class="back-button">← 返回首页</a>
+    <section>
+      <h2>关于成员</h2>
+      <div class="item animate">
+        <img src="https://source.unsplash.com/random/400x400/?portrait" alt="个人照片" style="width: 150px; height: 150px; border-radius: 50%; margin-bottom: 15px;">
+        <h3 id="previewMemberName">${document.getElementById('previewMemberName').textContent || "张三"}</h3>
+        <p id="previewMemberDesc">${document.getElementById('previewMemberDesc').textContent || "我是一名热爱艺术和设计的创作者，专注于数字艺术、平面设计和摄影。我的作品融合了传统技法与现代技术，致力于创造既有视觉冲击力又富有内涵的艺术表达。"}</p>
+        <p>通过这个网站，我希望能够分享我的创作历程，展示我的作品，并与志同道合的艺术家和爱好者交流。</p>
+      </div>
+    </section>
+    <section>
+      <h2>我的作品</h2>
+      <div class="works-container" id="previewWorks">
+        ${document.getElementById('previewWorks').innerHTML}
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>联系: <a href="mailto:contact@example.com">contact@example.com</a></p>
+  </footer>
+  <script src="script.js"></script>
 </body>
 </html>`;
 
   zip.file("generated.html", fullHTML);
 
+  // 对于每个作品，生成对应 JSON 文件
   const workEditors = document.querySelectorAll('.work-editor');
   workEditors.forEach((workEditor, index) => {
     const title = workEditor.querySelector('.workTitle').value;
     const description = workEditor.querySelector('.workDetails').value;
     const mediaInputs = workEditor.querySelectorAll('.mediaLink');
-
     const media = [];
     mediaInputs.forEach(input => {
       const src = input.value.trim();
@@ -149,16 +183,15 @@ ${previewContent}
         });
       }
     });
-
     const jsonData = {
       title,
       description,
       media
     };
-
     zip.file(`work_${index + 1}.json`, JSON.stringify(jsonData, null, 2));
   });
 
+  // 打包并下载 ZIP 文件
   const blob = await zip.generateAsync({ type: "blob" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
